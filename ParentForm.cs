@@ -16,13 +16,23 @@ namespace StockTracker
         public ParentForm()
         {
             InitializeComponent();
+            //this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
             DatabaseClass.CreateDB();
             DatabaseClass.CreateTable();
 
-            Form HomeForm = new HomeForm();
-            HomeForm.MdiParent = this;
-            HomeForm.Show();
+
+            if (!DatabaseClass.LocationTableCheck())
+            {
+                Form AddLocation = new AddLocation();
+                AddLocation.ShowDialog();
+            }
+            else
+            {
+                Form HomeForm = new Home();
+                HomeForm.MdiParent = this;
+                HomeForm.Show();
+            }
         }
     }
 }

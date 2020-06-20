@@ -10,21 +10,22 @@ using System.Windows.Forms;
 
 namespace StockTracker
 {
-    public partial class InInventoryForm : Form
+    public partial class OutInventory : Form
     {
-        public InInventoryForm()
+        public OutInventory()
         {
             InitializeComponent();
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                Form InInvLocation = new InInvLocation();
-                InInvLocation.ShowDialog();
-            }
+            Form OutInvLocation = new OutInvLocation();
+            OutInvLocation.ShowDialog();
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

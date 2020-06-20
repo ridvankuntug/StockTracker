@@ -19,6 +19,9 @@ namespace StockTracker
 
         private void button1_Click(object sender, EventArgs e)
         {
+            string LocationA = comboBox1.Text;
+            string LocationB = comboBox2.Text;
+            string LocationC = comboBox3.Text;
             Form InInvNumber = new InInvNumber();
             InInvNumber.Owner = this;//Alt formun parent(bu)'ı kapatabilmesini sağlayacak 
             InInvNumber.ShowDialog();

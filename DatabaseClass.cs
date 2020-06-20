@@ -13,10 +13,6 @@ namespace StockTracker
     {
         public static SQLiteConnection con = null;
 
-        public DatabaseClass()
-        {
-
-        }
 
         public static void ConnectDatabase()
         {
@@ -112,6 +108,79 @@ namespace StockTracker
                     }
                 }
             }
+        }
+
+        public static bool LocationTableCheck()
+        {
+            ConnectDatabase();
+            using (con)
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(con))
+                {
+                    int count;
+                    cmd.CommandText = @"SELECT count(*) FROM Location";
+                    cmd.Prepare();
+                    using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                    {
+                        if (rdr.Read())
+                        {
+                            count = rdr.GetInt32(0);
+                            if(count > 0)
+                            {
+                            return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                        con.Close();
+                    }
+                }
+            }
+        }
+        public static void LocationTableAddItem(int[] comboLocation)
+        {
+            try
+            {
+                ConnectDatabase();
+                using (con)
+                {
+
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        for (int i = 0; i < comboLocation[0]; i++)
+                        {
+                            for (int j = 0; j < comboLocation[1]; j++)
+                            {
+                                for (int k = 0; k < comboLocation[2]; k++)
+                                {
+                                    SQLiteTransaction transaction = null;
+                                    transaction = con.BeginTransaction();
+
+                                    cmd.CommandText = "INSERT INTO Location (LocationA, LocationB, LocationC) " +
+                                                                    "VALUES (@Location1, @Location2, @Location3)";
+                                    cmd.Prepare();
+                                    cmd.Parameters.AddWithValue("Location1", i);
+                                    cmd.Parameters.AddWithValue("Location2", j);
+                                    cmd.Parameters.AddWithValue("Location3", k);
+                                    cmd.ExecuteNonQuery();
+                                    transaction.Commit();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("Message: " + SQLiteThrow.Message + "\n");
+            }
+
         }
     }
 }

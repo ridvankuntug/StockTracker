@@ -10,25 +10,23 @@ using System.Windows.Forms;
 
 namespace StockTracker
 {
-    public partial class HomeForm : Form
+    public partial class OutInvLocation : Form
     {
-        public HomeForm()
+        public OutInvLocation()
         {
             InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Form InInventoryForm = new InInventoryForm();
-            InInventoryForm.MdiParent = ParentForm;
-            InInventoryForm.Show();
+            Form OutInvNumber = new OutInvNumber();
+            OutInvNumber.Owner = this;//Alt formun parent(bu)'ı kapatabilmesini sağlayacak 
+            OutInvNumber.ShowDialog();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Form OutInventoryForm = new OutInventoryForm();
-            OutInventoryForm.MdiParent = ParentForm;
-            OutInventoryForm.Show();
+            this.Close();
         }
     }
 }

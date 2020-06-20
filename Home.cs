@@ -10,24 +10,26 @@ using System.Windows.Forms;
 
 namespace StockTracker
 {
-    public partial class InInvNumber : Form
+    public partial class Home : Form
     {
-        public InInvNumber()
+        public Home()
         {
             InitializeComponent();
         }
 
+
         private void button1_Click(object sender, EventArgs e)
         {
-            string Number = textBox1.Text;
-            this.Owner.Close();
-            this.Close();
-            MessageBox.Show("Barcode: " + InInventory.Barcode);
+            Form InInventoryForm = new InInventory();
+            InInventoryForm.MdiParent = ParentForm;
+            InInventoryForm.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Form OutInventoryForm = new OutInventory();
+            OutInventoryForm.MdiParent = ParentForm;
+            OutInventoryForm.Show();
         }
     }
 }

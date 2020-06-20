@@ -74,6 +74,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "ParentForm";
             this.Text = "Form1";
             this.menuStrip1.ResumeLayout(false);

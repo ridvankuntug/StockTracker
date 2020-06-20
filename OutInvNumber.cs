@@ -10,19 +10,17 @@ using System.Windows.Forms;
 
 namespace StockTracker
 {
-    public partial class InInvNumber : Form
+    public partial class OutInvNumber : Form
     {
-        public InInvNumber()
+        public OutInvNumber()
         {
             InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string Number = textBox1.Text;
             this.Owner.Close();
             this.Close();
-            MessageBox.Show("Barcode: " + InInventory.Barcode);
         }
 
         private void button2_Click(object sender, EventArgs e)

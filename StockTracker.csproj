@@ -69,18 +69,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddLocation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddLocation.Designer.cs">
+      <DependentUpon>AddLocation.cs</DependentUpon>
+    </Compile>
     <Compile Include="DatabaseClass.cs" />
-    <Compile Include="HomeForm.cs">
+    <Compile Include="Home.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HomeForm.Designer.cs">
-      <DependentUpon>HomeForm.cs</DependentUpon>
+    <Compile Include="Home.Designer.cs">
+      <DependentUpon>Home.cs</DependentUpon>
     </Compile>
-    <Compile Include="InInventoryForm.cs">
+    <Compile Include="InInventory.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InInventoryForm.Designer.cs">
-      <DependentUpon>InInventoryForm.cs</DependentUpon>
+    <Compile Include="InInventory.Designer.cs">
+      <DependentUpon>InInventory.cs</DependentUpon>
     </Compile>
     <Compile Include="InInvNumber.cs">
       <SubType>Form</SubType>
@@ -94,11 +100,23 @@
     <Compile Include="InInvLocation.Designer.cs">
       <DependentUpon>InInvLocation.cs</DependentUpon>
     </Compile>
-    <Compile Include="OutInventoryForm.cs">
+    <Compile Include="OutInventory.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OutInventoryForm.Designer.cs">
-      <DependentUpon>OutInventoryForm.cs</DependentUpon>
+    <Compile Include="OutInventory.Designer.cs">
+      <DependentUpon>OutInventory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OutInvLocation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OutInvLocation.Designer.cs">
+      <DependentUpon>OutInvLocation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OutInvNumber.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OutInvNumber.Designer.cs">
+      <DependentUpon>OutInvNumber.cs</DependentUpon>
     </Compile>
     <Compile Include="ParentForm.cs">
       <SubType>Form</SubType>
@@ -108,17 +126,29 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="HomeForm.resx">
-      <DependentUpon>HomeForm.cs</DependentUpon>
+    <EmbeddedResource Include="AddLocation.resx">
+      <DependentUpon>AddLocation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InInventoryForm.resx">
-      <DependentUpon>InInventoryForm.cs</DependentUpon>
+    <EmbeddedResource Include="Home.resx">
+      <DependentUpon>Home.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InInventory.resx">
+      <DependentUpon>InInventory.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InInvNumber.resx">
       <DependentUpon>InInvNumber.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InInvLocation.resx">
       <DependentUpon>InInvLocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OutInventory.resx">
+      <DependentUpon>OutInventory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OutInvLocation.resx">
+      <DependentUpon>OutInvLocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OutInvNumber.resx">
+      <DependentUpon>OutInvNumber.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ParentForm.resx">
       <DependentUpon>ParentForm.cs</DependentUpon>
