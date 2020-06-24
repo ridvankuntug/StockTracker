@@ -19,14 +19,17 @@ namespace StockTracker
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Form OutInvNumber = new OutInvNumber();
-            OutInvNumber.Owner = this;//Alt formun parent(bu)'ı kapatabilmesini sağlayacak 
-            OutInvNumber.ShowDialog();
+
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

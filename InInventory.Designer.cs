@@ -33,6 +33,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,9 +53,9 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label1.Location = new System.Drawing.Point(32, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(215, 16);
+            this.label1.Size = new System.Drawing.Size(212, 16);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Click to box for enter barcode:";
+            this.label1.Text = "Click to box for read barcode:";
             // 
             // label2
             // 
@@ -84,12 +85,23 @@
             this.dataGridView1.Size = new System.Drawing.Size(502, 398);
             this.dataGridView1.TabIndex = 10;
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(12, 387);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(90, 23);
+            this.button2.TabIndex = 7;
+            this.button2.Text = "New Product";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button1_Click);
+            // 
             // InInventory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(796, 422);
             this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -98,6 +110,7 @@
             this.Name = "InInventory";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "InInventoryForm";
+            this.Load += new System.EventHandler(this.InInventory_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -111,5 +124,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button button2;
     }
 }
