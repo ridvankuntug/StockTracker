@@ -37,7 +37,7 @@ namespace StockTracker
 
         private void newInventoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form NewProduct = new NewProduct();
+            Form NewProduct = new ManageProducts();
             NewProduct.MdiParent = this;
             NewProduct.Show();
         }

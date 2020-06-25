@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace StockTracker
 {
-    public partial class NewProduct : Form
+    public partial class ManageProducts : Form
     {
-        public NewProduct()
+        public ManageProducts()
         {
             InitializeComponent();
         }

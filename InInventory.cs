@@ -17,15 +17,14 @@ namespace StockTracker
             InitializeComponent();
         }
 
+
         public static int Barcode;
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Barcode = Int32.Parse(textBox1.Text);
-                Form InInvLocation = new InInvOptions();
-                InInvLocation.ShowDialog();
+                Enter();
             }
         }
 
@@ -34,11 +33,23 @@ namespace StockTracker
             this.Close();
         }
 
-        private void InInventory_Load(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-            Form NewProduct = new NewProduct();
-            NewProduct.MdiParent = ParentForm;
-            NewProduct.Show();
+            Form ManageProducts = new ManageProducts();
+            ManageProducts.MdiParent = ParentForm;
+            ManageProducts.Show();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Enter();
+        }
+
+        private void Enter()
+        {
+            Barcode = Int32.Parse(textBox1.Text);
+            Form InInvLocation = new InInvOptions();
+            InInvLocation.ShowDialog();
         }
     }
 }
