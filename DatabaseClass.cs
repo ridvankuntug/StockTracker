@@ -67,29 +67,29 @@ namespace StockTracker
                     try
                     {
                         cmd.CommandText = @"CREATE TABLE IF NOT EXISTS products (
-                                            product_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                                            product_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
                                             product_barcode INTEGER NOT NULL UNIQUE, 
                                             product_name VARCHAR(55) NOT NULL UNIQUE,
-                                            product_first_add_time TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL);
+                                            product_first_add_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
 
                                             CREATE TABLE IF NOT EXISTS locations (
-                                            location_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                                            location_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
                                             location_a VARCHAR(3) NOT NULL,
                                             location_b VARCHAR(3) NOT NULL,
                                             location_c VARCHAR(3) NOT NULL);
 
                                             CREATE TABLE IF NOT EXISTS stock (
-                                            stock_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                                            product_id INTEGER REFERENCES products(product_id) ON UPDATE CASCADE,
-                                            location_id INTEGER REFERENCES locations(location_id) ON UPDATE CASCADE,
+                                            stock_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
+                                            product_id INTEGER NOT NULL REFERENCES products(product_id) ON UPDATE CASCADE,
+                                            location_id INTEGER NOT NULL REFERENCES locations(location_id) ON UPDATE CASCADE,
                                             stock_number INTEGER NOT NULL);
 
                                             CREATE TABLE IF NOT EXISTS history (
-                                            history_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                                            product_id INTEGER REFERENCES products(product_id) ON UPDATE CASCADE,
+                                            history_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
+                                            product_id INTEGER NOT NULL REFERENCES products(product_id) ON UPDATE CASCADE,
                                             history_status INTEGER NOT NULL,
                                             stock_number INTEGER NOT NULL,
-                                            history_adding_time TEXT DEFAULT CURRENT_TIMESTAMP NOT NULL)
+                                            history_adding_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)
                                             
                                             ";
 
@@ -241,6 +241,7 @@ namespace StockTracker
                         transaction.Commit();
                     }
                 }
+                MessageBox.Show("Saved.");
             }
             catch (SQLiteException SQLiteThrow)
             {
@@ -296,7 +297,7 @@ namespace StockTracker
             }
             catch (SQLiteException SQLiteThrow)
             {
-                MessageBox.Show("IsBarcodeExist Message: " + SQLiteThrow.Message + "\n");
+                MessageBox.Show("GetLocationList Message: " + SQLiteThrow.Message + "\n");
                 return null;
             }
         }
@@ -330,12 +331,93 @@ namespace StockTracker
             }
             catch (SQLiteException SQLiteThrow)
             {
-                MessageBox.Show("WhereIsProduct Message: " + SQLiteThrow.Message + "\n");
+                MessageBox.Show("WhereIsProduct Message: " + SQLiteThrow.Message);
                 return null;
             }
         }
 
-        public static void InInventory(int Barcode, int Number, string[] Location)
+        public static string ProductName(int Barcode)
+        {
+            try
+            {
+                ConnectDatabase();
+                string name = null;
+                using (con)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        cmd.CommandText = @"SELECT product_name FROM products WHERE product_barcode = @Barcode";
+                        cmd.Parameters.AddWithValue("Barcode", Barcode);
+                        using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                        {
+                            if (rdr.Read())
+                            {
+                                name = rdr.GetString(0);
+                            }
+                            return name;
+                            con.Close();
+                        }
+                    }
+                }
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("ProductName Message: " + SQLiteThrow.Message);
+                return null;
+            }
+        }
+
+        public static bool InInvIsExist(int Barcode, string[] Location)
+        {
+            try
+            {
+                ConnectDatabase();
+                using (con)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        cmd.CommandText = @"
+                            SELECT stock_id FROM stock WHERE 
+                                product_id IN (SELECT product_id FROM products WHERE product_barcode = @Barcode)
+                                AND
+                                location_id IN(SELECT location_id FROM locations WHERE 
+                                    location_a = @Location1 AND location_b = @Location2 AND location_c = @Location3)";
+                        cmd.Prepare();
+                        cmd.Parameters.AddWithValue("Barcode", Barcode);
+                        cmd.Parameters.AddWithValue("Location1", Location[0]);
+                        cmd.Parameters.AddWithValue("Location2", Location[1]);
+                        cmd.Parameters.AddWithValue("Location3", Location[2]);
+                        cmd.Parameters.AddWithValue("Barcode", Barcode);
+                        using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                        {
+                            if (rdr.Read())
+                            {
+                                if (rdr.GetInt32(0) != null)
+                                {
+                                    return true;
+                                }
+                                else
+                                {
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                            con.Close();
+                        }
+                    }
+                }
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("InInvIsExist Message: " + SQLiteThrow.Message + "\n");
+                return false;
+            }
+        }
+
+        public static void InInventoryInsert(int Barcode, int Number, string[] Location)
         {
             try
             {
@@ -347,51 +429,82 @@ namespace StockTracker
                         SQLiteTransaction transaction = null;
                         transaction = con.BeginTransaction();
 
-                        cmd.CommandText = @"INSERT INTO stock (product_id, location_id, stock_number) 
-                                          VALUES 
-                                            ((SELECT product_id FROM products WHERE product_barcode = @Barcode),
-                                            (SELECT location_id FROM locations WHERE location_a=@Location1 AND location_b=@Location2 AND location_c=@Location3),
-                                            @Number);
+                        cmd.CommandText = @"
+                            INSERT INTO stock (product_id, location_id, stock_number) 
+                            VALUES 
+                                ((SELECT product_id FROM products WHERE product_barcode = @Barcode),
+                                (SELECT location_id FROM locations WHERE 
+                                    location_a = @Location1 AND location_b = @Location2 AND location_c = @Location3),
+                                @Number);
 
-                                        INSERT INTO history (product_id, history_status, stock_number) 
-                                        VALUES 
-                                            ((SELECT product_id FROM products WHERE product_barcode = @Barcode), 
-                                            '1', 
-                                            @Number)";
+                            INSERT INTO history (product_id, history_status, stock_number) 
+                            VALUES 
+                                ((SELECT product_id FROM products WHERE product_barcode = @Barcode), 
+                                '1', 
+                                @Number)
+                        ";
                         cmd.Prepare();
                         cmd.Parameters.AddWithValue("Barcode", Barcode);
                         cmd.Parameters.AddWithValue("Location1", Location[0]);
-                        cmd.Parameters.AddWithValue("location2", Location[1]);
-                        cmd.Parameters.AddWithValue("location3", Location[2]);
+                        cmd.Parameters.AddWithValue("Location2", Location[1]);
+                        cmd.Parameters.AddWithValue("Location3", Location[2]);
                         cmd.Parameters.AddWithValue("Number", Number);
                         cmd.ExecuteNonQuery();
                         transaction.Commit();
                     }
                 }
+                MessageBox.Show("Saved.");
             }
             catch (SQLiteException SQLiteThrow)
             {
-                string stringCutted = SQLiteThrow.Message.Split(' ').Last();
-                if (SQLiteThrow.ErrorCode == 19)
-                {
-                    if (Equals(stringCutted, "products.product_name"))
-                    {
-                        MessageBox.Show("This product name already exist!");
-                    }
-                    else if (Equals(stringCutted, "products.product_barcode"))
-                    {
-                        MessageBox.Show("This product barcode already exist!");
-                    }
-                    else
-                    {
-                        MessageBox.Show("AddNewProduct Message19: " + SQLiteThrow.Message + "\n");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("AddNewProduct Message: " + SQLiteThrow.Message + "\n");
-                }
+                    MessageBox.Show("InInventoryInsert Message: " + SQLiteThrow.Message);
             }
         }
+
+        public static void InInventoryUpdate(int Barcode, int Number, string[] Location)
+        {
+            try
+            {
+                ConnectDatabase();
+                using (con)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        SQLiteTransaction transaction = null;
+                        transaction = con.BeginTransaction();
+
+                        cmd.CommandText = @"
+                            UPDATE stock SET stock_number = stock_number + @Number WHERE 
+                                stock_id IN (SELECT stock_id FROM stock WHERE 
+                                product_id IN (SELECT product_id FROM products WHERE product_barcode = @Barcode)
+                                AND
+                                location_id IN (SELECT location_id FROM locations WHERE 
+                                    location_a = @Location1 AND location_b = @Location2 AND location_c = @Location3));
+
+                            INSERT INTO history (product_id, history_status, stock_number) 
+                            VALUES 
+                                ((SELECT product_id FROM products WHERE product_barcode = @Barcode), 
+                                '1', 
+                                @Number)
+                        ";
+                        cmd.Prepare();
+                        cmd.Parameters.AddWithValue("Barcode", Barcode);
+                        cmd.Parameters.AddWithValue("Location1", Location[0]);
+                        cmd.Parameters.AddWithValue("Location2", Location[1]);
+                        cmd.Parameters.AddWithValue("Location3", Location[2]);
+                        cmd.Parameters.AddWithValue("Number", Number);
+                        cmd.ExecuteNonQuery();
+                        transaction.Commit();
+                    }
+                }
+                MessageBox.Show("Updated.");
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("InInventoryUpdate Message: " + SQLiteThrow.Message);
+            }
+        }
+
+
     }
 }

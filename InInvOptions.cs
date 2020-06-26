@@ -19,6 +19,7 @@ namespace StockTracker
 
         private void InInvOptions_Load(object sender, EventArgs e)
         {
+            label8.Text = DatabaseClass.ProductName(InInventory.Barcode);
             label7.Text = DatabaseClass.WhereIsProduct(InInventory.Barcode);
             string[] locations = new string[3];
             locations = DatabaseClass.GetLocationList();
@@ -37,11 +38,33 @@ namespace StockTracker
         private void button1_Click(object sender, EventArgs e)
         {
             string[] Location = new string[3];
-            Location[0] = comboBox1.SelectedItem.ToString();
-            Location[1] = comboBox2.SelectedItem.ToString();
-            Location[2] = comboBox3.SelectedItem.ToString();
+            try
+            {
+                if (comboBox1.SelectedItem == null || comboBox2.SelectedItem == null || comboBox3.SelectedItem == null)
+                {
+                    MessageBox.Show("Location is not selected correctly.");
+                }
+                else
+                {
+                    Location[0] = comboBox1.SelectedItem.ToString();
+                    Location[1] = comboBox2.SelectedItem.ToString();
+                    Location[2] = comboBox3.SelectedItem.ToString();
 
-            DatabaseClass.InInventory(InInventory.Barcode, Decimal.ToInt32(numericUpDown1.Value), Location);
+                    if(DatabaseClass.InInvIsExist(InInventory.Barcode, Location))
+                    {
+                        DatabaseClass.InInventoryUpdate(InInventory.Barcode, Decimal.ToInt32(numericUpDown1.Value), Location);
+                    }
+                    else
+                    {
+                        DatabaseClass.InInventoryInsert(InInventory.Barcode, Decimal.ToInt32(numericUpDown1.Value), Location);
+                    }
+                    this.Close();
+                }
+            }
+            catch (NullReferenceException InvalidThrow)
+            {
+                MessageBox.Show("Location is not selected correctly. Message: " + InvalidThrow.Message);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)

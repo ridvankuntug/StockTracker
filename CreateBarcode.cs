@@ -73,5 +73,10 @@ namespace StockTracker
             pictureBox1.Image = writer.Write(textBox1.Text);
 
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

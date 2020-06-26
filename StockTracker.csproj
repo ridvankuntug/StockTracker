@@ -116,6 +116,7 @@
     <Compile Include="ManageProducts.Designer.cs">
       <DependentUpon>ManageProducts.cs</DependentUpon>
     </Compile>
+    <Compile Include="MethodsClass.cs" />
     <Compile Include="OutInventory.cs">
       <SubType>Form</SubType>
     </Compile>
