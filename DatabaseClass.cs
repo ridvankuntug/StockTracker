@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SQLite;
 using System.IO;
 using System.Windows.Forms;
+using System.Data;
 
 namespace StockTracker
 {
@@ -89,14 +90,17 @@ namespace StockTracker
                                             product_id INTEGER NOT NULL REFERENCES products(product_id) ON UPDATE CASCADE,
                                             history_status INTEGER NOT NULL,
                                             stock_number INTEGER NOT NULL,
-                                            history_adding_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)
+                                            history_adding_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+
+                                            CREATE VIEW IF NOT EXISTS history_view
+                                            AS
+                                            SELECT product_name, product_barcode, history_status, stock_number, history_adding_time FROM history
+                                            JOIN products ON products.product_id = history.product_id
                                             
                                             ";
 
                                             
-                    
                         cmd.ExecuteNonQuery();
-
                         con.Close();
                     }
                     catch (SQLiteException SQLiteThrow)
@@ -176,6 +180,33 @@ namespace StockTracker
             catch (SQLiteException SQLiteThrow)
             {
                 MessageBox.Show("LocationTableAddItem Message: " + SQLiteThrow.Message + "\n");
+            }
+        }
+
+        public static DataSet GridFill(string viewName)
+        {
+            try
+            {
+                ConnectDatabase();
+                using (con)
+                {
+                    string cmdText = string.Format("SELECT * FROM {0}", viewName);
+
+                    using (SQLiteDataAdapter cmd = new SQLiteDataAdapter(cmdText, con))
+                    {
+                        using (DataSet ds = new DataSet())
+                        {
+                            cmd.Fill(ds, "*");
+                            return ds;
+                            con.Close();
+                        }
+                    }
+                }
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("SQLiteDataReader Message: " + SQLiteThrow.Message);
+                return null;
             }
         }
 

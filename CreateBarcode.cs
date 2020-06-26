@@ -78,5 +78,41 @@ namespace StockTracker
         {
             this.Close();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Form ManageProducts = new ManageProducts();
+            ManageProducts.MdiParent = ParentForm;
+            ManageProducts.Show();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Random rnd = new Random();
+            string rand = rnd.Next(100000000, 999999999).ToString();
+
+            
+            do {
+                textBox1.Text = rand;
+                rand = rnd.Next(100000000, 999999999).ToString();
+            } while(DatabaseClass.IsBarcodeExist(rand));
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(textBox1.Text, "  ^ [0-9]"))
+            {
+                textBox1.Text = "";
+            }
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
     }
 }
