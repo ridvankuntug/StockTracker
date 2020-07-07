@@ -41,5 +41,22 @@ namespace StockTracker
             NewProduct.MdiParent = this;
             NewProduct.Show();
         }
+
+        private void homeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<Form> formsList = new List<Form>();
+
+            for (int i = formsList.Count - 1; i > 0; i--)
+            {
+                if (formsList[i].Name != "Menu")
+                {
+                    formsList[i].Close();
+                }
+            }
+
+            Form HomeForm = new Home();
+            HomeForm.MdiParent = this;
+            HomeForm.Show();
+        }
     }
 }

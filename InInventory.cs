@@ -17,6 +17,29 @@ namespace StockTracker
             InitializeComponent();
         }
 
+        private void InInventory_Load(object sender, EventArgs e)
+        {
+            DataGridFill();
+        }
+
+        private void DataGridFill()
+        {
+            string date = "AND history_adding_time  BETWEEN '" + DateTime.Today.AddDays(-2).ToString("yyyy-MM-dd") + " 00:00:00' and '" + DateTime.Today.ToString("yyyy-MM-dd") + " 23:59:59'";
+
+            DataSet ds = DatabaseClass.GridFill("*", "in_history_view", "", "", date, "");
+            dataGridView1.DataSource = ds.Tables["*"];
+            dataGridView1.Columns[0].HeaderText = "Name";
+            dataGridView1.Columns[1].HeaderText = "Barcode";
+            dataGridView1.Columns[2].HeaderText = "Number";
+            dataGridView1.Columns[3].HeaderText = "Location";
+            dataGridView1.Columns[4].HeaderText = "Add Date";
+            dataGridView1.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridView1.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridView1.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridView1.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridView1.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridView1.Sort(this.dataGridView1.Columns[4], ListSortDirection.Descending);
+        }
 
         public static int Barcode;
 
@@ -47,9 +70,50 @@ namespace StockTracker
 
         private void Enter()
         {
-            Barcode = Int32.Parse(textBox1.Text);
-            Form InInvLocation = new InInvOptions();
-            InInvLocation.ShowDialog();
+            if (textBox1.Text.Length < 9)
+            {
+                MessageBox.Show("Barcode must be at 9 characters long.");
+            }
+            else if (!DatabaseClass.IsBarcodeExist(textBox1.Text))
+            {
+                MessageBox.Show("Barcode is undefined on products.");
+            }
+            else
+            {
+                Barcode = Int32.Parse(textBox1.Text);
+
+                Form InInvOptions = new InInvOptions();
+                InInvOptions.ShowDialog(this);
+                if (InInvOptions.DialogResult == DialogResult.OK)
+                {
+                    dataGridView1.DataSource = null;
+                    DataGridFill();
+                }
+            }
         }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(textBox1.Text, "  ^ [0-9]"))
+            {
+                textBox1.Text = "";
+            }
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void InInventory_Activated(object sender, EventArgs e)
+        {
+            dataGridView1.DataSource = null;
+            DataGridFill();
+        }
+
+
     }
 }

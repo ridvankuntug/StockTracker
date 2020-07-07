@@ -7,6 +7,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.Windows.Forms;
 using System.Data;
+using System.Reflection.Emit;
 
 namespace StockTracker
 {
@@ -65,47 +66,85 @@ namespace StockTracker
             {
                 using (SQLiteCommand cmd = new SQLiteCommand(con))
                 {
+                    cmd.Connection = con;
+                    SQLiteTransaction myTrans;
+
+                    // Start a local transaction
+                    myTrans = con.BeginTransaction();
+                    // Assign transaction object for a pending local transaction
+                    cmd.Transaction = myTrans;
+
                     try
                     {
-                        cmd.CommandText = @"CREATE TABLE IF NOT EXISTS products (
-                                            product_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
-                                            product_barcode INTEGER NOT NULL UNIQUE, 
-                                            product_name VARCHAR(55) NOT NULL UNIQUE,
-                                            product_first_add_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+                        cmd.CommandText = @"
+                            CREATE TABLE IF NOT EXISTS products (
+                            product_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
+                            product_barcode INTEGER NOT NULL UNIQUE, 
+                            product_name VARCHAR(55) NOT NULL UNIQUE,
+                            product_first_add_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
 
-                                            CREATE TABLE IF NOT EXISTS locations (
-                                            location_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
-                                            location_a VARCHAR(3) NOT NULL,
-                                            location_b VARCHAR(3) NOT NULL,
-                                            location_c VARCHAR(3) NOT NULL);
+                            CREATE TABLE IF NOT EXISTS locations (
+                            location_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
+                            location_a VARCHAR(3) NOT NULL,
+                            location_b VARCHAR(3) NOT NULL,
+                            location_c VARCHAR(3) NOT NULL,
+                            location VARCHAR(3) NOT NULL);
 
-                                            CREATE TABLE IF NOT EXISTS stock (
-                                            stock_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
-                                            product_id INTEGER NOT NULL REFERENCES products(product_id) ON UPDATE CASCADE,
-                                            location_id INTEGER NOT NULL REFERENCES locations(location_id) ON UPDATE CASCADE,
-                                            stock_number INTEGER NOT NULL);
+                            CREATE TABLE IF NOT EXISTS stock (
+                            stock_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
+                            product_id INTEGER NOT NULL REFERENCES products(product_id) ON UPDATE CASCADE,
+                            location_id INTEGER NOT NULL REFERENCES locations(location_id) ON UPDATE CASCADE,
+                            stock_number INTEGER NOT NULL);
 
-                                            CREATE TABLE IF NOT EXISTS history (
-                                            history_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
-                                            product_id INTEGER NOT NULL REFERENCES products(product_id) ON UPDATE CASCADE,
-                                            history_status INTEGER NOT NULL,
-                                            stock_number INTEGER NOT NULL,
-                                            history_adding_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+                            CREATE TABLE IF NOT EXISTS history (
+                            history_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
+                            product_id INTEGER NOT NULL REFERENCES products(product_id) ON UPDATE CASCADE,
+                            history_status INTEGER NOT NULL,
+                            stock_number INTEGER NOT NULL,
+                            location_id INTEGER NOT NULL REFERENCES locations(location_id) ON UPDATE CASCADE,
+                            history_adding_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
 
-                                            CREATE VIEW IF NOT EXISTS history_view
-                                            AS
-                                            SELECT product_name, product_barcode, history_status, stock_number, history_adding_time FROM history
-                                            JOIN products ON products.product_id = history.product_id
+                            CREATE VIEW IF NOT EXISTS history_view
+                            AS
+                            SELECT product_name, product_barcode, history_status, stock_number, location, history_adding_time FROM history
+                            JOIN products ON products.product_id = history.product_id
+                            JOIN locations ON locations.location_id = history.location_id;
+
+                            CREATE VIEW IF NOT EXISTS in_history_view
+                            AS
+                            SELECT product_name, product_barcode, stock_number, location, history_adding_time FROM history
+                            JOIN products ON products.product_id = history.product_id
+                            JOIN locations ON locations.location_id = history.location_id
+                            WHERE history_status = '1';
+
+                            CREATE VIEW IF NOT EXISTS out_history_view
+                            AS
+                            SELECT product_name, product_barcode, stock_number, location, history_adding_time FROM history
+                            JOIN products ON products.product_id = history.product_id
+                            JOIN locations ON locations.location_id = history.location_id
+                            WHERE history_status = '0';
                                             
-                                            ";
+                            CREATE VIEW IF NOT EXISTS stock_view
+                            AS
+                            SELECT product_name, product_barcode, SUM(stock_number), GROUP_CONCAT(location ,', ') FROM stock 
+                            JOIN products ON products.product_id = stock.product_id
+                            JOIN locations ON locations.location_id = stock.location_id 
+                            GROUP BY product_barcode;
+                            
 
+                            ";
                                             
                         cmd.ExecuteNonQuery();
-                        con.Close();
+                        myTrans.Commit();
                     }
                     catch (SQLiteException SQLiteThrow)
                     {
+                        myTrans.Rollback();
                         MessageBox.Show("CreateTable Message: " + SQLiteThrow.Message + "\n");
+                    }
+                    finally
+                    {
+                        con.Close();
                     }
                 }
             }
@@ -166,12 +205,13 @@ namespace StockTracker
                         SQLiteTransaction transaction = null;
                         transaction = con.BeginTransaction();
 
-                        cmd.CommandText = @"INSERT INTO locations (location_a, location_b, Location_c) 
-                                            VALUES (@Location1, @Location2, @Location3)";
+                        cmd.CommandText = @"INSERT INTO locations (location_a, location_b, Location_c, location) 
+                                            VALUES (@Location1, @Location2, @Location3, @Location)";
                         cmd.Prepare();
                         cmd.Parameters.AddWithValue("Location1", i.ToString());
                         cmd.Parameters.AddWithValue("Location2", j);
                         cmd.Parameters.AddWithValue("Location3", k);
+                        cmd.Parameters.AddWithValue("Location", i.ToString() + j + k);
                         cmd.ExecuteNonQuery();
                         transaction.Commit();
                     }
@@ -183,14 +223,24 @@ namespace StockTracker
             }
         }
 
-        public static DataSet GridFill(string viewName)
+        public static DataSet GridFill(string columns, string viewTable, string searchArgName, string searchArgBarcode, string date, string groupBy)
         {
             try
             {
                 ConnectDatabase();
                 using (con)
                 {
-                    string cmdText = string.Format("SELECT * FROM {0}", viewName);
+                    string cmdText;
+
+                    if (groupBy == "")
+                    {
+                        cmdText = string.Format("SELECT " + columns + " FROM " + viewTable + " WHERE product_name LIKE '" + searchArgName + "%' AND product_barcode LIKE '" + searchArgBarcode + "%'" + date);
+                    }
+                    else
+                    {
+                        cmdText = string.Format("SELECT " + columns + " FROM " + viewTable + " WHERE product_name LIKE '" + searchArgName + "%' AND product_barcode LIKE '" + searchArgBarcode + "%'" + date + groupBy);
+
+                    }
 
                     using (SQLiteDataAdapter cmd = new SQLiteDataAdapter(cmdText, con))
                     {
@@ -198,14 +248,14 @@ namespace StockTracker
                         {
                             cmd.Fill(ds, "*");
                             return ds;
-                            con.Close();
+                con.Close();
                         }
                     }
                 }
             }
             catch (SQLiteException SQLiteThrow)
             {
-                MessageBox.Show("SQLiteDataReader Message: " + SQLiteThrow.Message);
+                MessageBox.Show("GridFill Message: " + SQLiteThrow.Message);
                 return null;
             }
         }
@@ -418,7 +468,6 @@ namespace StockTracker
                         cmd.Parameters.AddWithValue("Location1", Location[0]);
                         cmd.Parameters.AddWithValue("Location2", Location[1]);
                         cmd.Parameters.AddWithValue("Location3", Location[2]);
-                        cmd.Parameters.AddWithValue("Barcode", Barcode);
                         using (SQLiteDataReader rdr = cmd.ExecuteReader())
                         {
                             if (rdr.Read())
@@ -468,10 +517,12 @@ namespace StockTracker
                                     location_a = @Location1 AND location_b = @Location2 AND location_c = @Location3),
                                 @Number);
 
-                            INSERT INTO history (product_id, history_status, stock_number) 
+                            INSERT INTO history (product_id, history_status, location_id, stock_number) 
                             VALUES 
                                 ((SELECT product_id FROM products WHERE product_barcode = @Barcode), 
                                 '1', 
+                                (SELECT location_id FROM locations WHERE 
+                                    location_a = @Location1 AND location_b = @Location2 AND location_c = @Location3),
                                 @Number)
                         ";
                         cmd.Prepare();
@@ -512,10 +563,12 @@ namespace StockTracker
                                 location_id IN (SELECT location_id FROM locations WHERE 
                                     location_a = @Location1 AND location_b = @Location2 AND location_c = @Location3));
 
-                            INSERT INTO history (product_id, history_status, stock_number) 
+                            INSERT INTO history (product_id, history_status, location_id, stock_number) 
                             VALUES 
                                 ((SELECT product_id FROM products WHERE product_barcode = @Barcode), 
                                 '1', 
+                                (SELECT location_id FROM locations WHERE 
+                                    location_a = @Location1 AND location_b = @Location2 AND location_c = @Location3),
                                 @Number)
                         ";
                         cmd.Prepare();
@@ -529,10 +582,284 @@ namespace StockTracker
                     }
                 }
                 MessageBox.Show("Updated.");
+
             }
             catch (SQLiteException SQLiteThrow)
             {
                 MessageBox.Show("InInventoryUpdate Message: " + SQLiteThrow.Message);
+            }
+        }
+
+        public static List<List<string>> GetStockLocations(int Barcode)
+        {
+            try
+            {
+                ConnectDatabase();
+                List<string> location = new List<string>();
+                List<string> number = new List<string>();
+                using (con)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        cmd.CommandText = @"SELECT location, stock_number FROM locations 
+                            JOIN stock ON stock.location_id = locations.location_id
+                            WHERE stock.product_id IN (SELECT product_id FROM products WHERE product_barcode = @Barcode)
+                        ";
+                        cmd.Parameters.AddWithValue("Barcode", Barcode);
+                        using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                        {
+                            while (rdr.Read())
+                            {
+                                location.Add(rdr.GetString(0));
+                                number.Add(rdr.GetInt32(1).ToString());
+                            }
+
+                            List<List<string>> locations = new List<List<string>> {location, number};
+                            return locations;
+                            con.Close();
+                        }
+                    }
+                }
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("GetStockLocations Message: " + SQLiteThrow.Message + "\n");
+                return null;
+            }
+        }
+
+        public static bool OutInvIsExist(int Barcode, string Location)
+        {
+            try
+            {
+                ConnectDatabase();
+                using (con)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        cmd.CommandText = @"
+                            SELECT stock_id FROM stock WHERE 
+                                product_id IN (SELECT product_id FROM products WHERE product_barcode = @Barcode)
+                                AND
+                                location_id IN(SELECT location_id FROM locations WHERE 
+                                    location = @Location)";
+                        cmd.Prepare();
+                        cmd.Parameters.AddWithValue("Barcode", Barcode);
+                        cmd.Parameters.AddWithValue("Location", Location);
+                        using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                        {
+                            if (rdr.Read())
+                            {
+                                if (rdr.GetInt32(0) != null)
+                                {
+                                    return true;
+                                }
+                                else
+                                {
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                            con.Close();
+                        }
+                    }
+                }
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("OutInvIsExist Message: " + SQLiteThrow.Message + "\n");
+                return false;
+            }
+        }
+
+        public static bool EnoughInStock(int Barcode, string Location, int Number)
+        {
+            try
+            {
+                ConnectDatabase();
+                using (con)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        cmd.CommandText = @"
+                            SELECT stock_id FROM stock WHERE 
+                                product_id IN (SELECT product_id FROM products WHERE product_barcode = @Barcode)
+                                AND
+                                location_id IN(SELECT location_id FROM locations WHERE 
+                                    location = @Location)
+                                AND stock_number > @number
+                        ";
+                        cmd.Prepare();
+                        cmd.Parameters.AddWithValue("Barcode", Barcode);
+                        cmd.Parameters.AddWithValue("Location", Location);
+                        cmd.Parameters.AddWithValue("Number", Number);
+                        using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                        {
+                            if (rdr.Read())
+                            {
+                                if (rdr.GetInt32(0) != null)
+                                {
+                                    return true;
+                                }
+                                else
+                                {
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                            con.Close();
+                        }
+                    }
+                }
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("EnoughInStock Message: " + SQLiteThrow.Message + "\n");
+                return false;
+            }
+        }
+
+        public static bool IsStockZero(int Barcode, string Location, int Number)
+        {
+            try
+            {
+                ConnectDatabase();
+                using (con)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        cmd.CommandText = @"
+                            SELECT stock_id FROM stock WHERE 
+                                product_id IN (SELECT product_id FROM products WHERE product_barcode = @Barcode)
+                                AND
+                                location_id IN(SELECT location_id FROM locations WHERE 
+                                    location = @Location)
+                                AND stock_number = @number
+                        ";
+                        cmd.Prepare();
+                        cmd.Parameters.AddWithValue("Barcode", Barcode);
+                        cmd.Parameters.AddWithValue("Location", Location);
+                        cmd.Parameters.AddWithValue("Number", Number);
+                        using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                        {
+                            if (rdr.Read())
+                            {
+                                if (rdr.GetInt32(0) != null)
+                                {
+                                    return true;
+                                }
+                                else
+                                {
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                            con.Close();
+                        }
+                    }
+                }
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("IsStockZero Message: " + SQLiteThrow.Message + "\n");
+                return false;
+            }
+        }
+
+        public static void OutInventoryUpdate(int Barcode, int Number, string Location)
+        {
+            try
+            {
+                ConnectDatabase();
+                using (con)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        SQLiteTransaction transaction = null;
+                        transaction = con.BeginTransaction();
+
+                        cmd.CommandText = @"
+                            UPDATE stock SET stock_number = stock_number - @Number WHERE 
+                                stock_id IN (SELECT stock_id FROM stock WHERE 
+                                product_id IN (SELECT product_id FROM products WHERE product_barcode = @Barcode)
+                                AND
+                                location_id IN (SELECT location_id FROM locations WHERE 
+                                    location = @Location));
+
+                            INSERT INTO history (product_id, history_status, location_id, stock_number) 
+                            VALUES 
+                                ((SELECT product_id FROM products WHERE product_barcode = @Barcode), 
+                                '0', 
+                                (SELECT location_id FROM locations WHERE 
+                                    location = @Location),
+                                @Number)
+                        ";
+                        cmd.Prepare();
+                        cmd.Parameters.AddWithValue("Barcode", Barcode);
+                        cmd.Parameters.AddWithValue("Location", Location);
+                        cmd.Parameters.AddWithValue("Number", Number);
+                        cmd.ExecuteNonQuery();
+                        transaction.Commit();
+                    }
+                }
+                MessageBox.Show("Updated Out Inventory.");
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("OutInventory Message: " + SQLiteThrow.Message);
+            }
+        }
+
+        public static void OutInventoryDelete(int Barcode, int Number, string Location)
+        {
+            try
+            {
+                ConnectDatabase();
+                using (con)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        SQLiteTransaction transaction = null;
+                        transaction = con.BeginTransaction();
+
+                        cmd.CommandText = @"
+                            DELETE FROM stock WHERE 
+                                stock_id IN (SELECT stock_id FROM stock WHERE 
+                                product_id IN (SELECT product_id FROM products WHERE product_barcode = @Barcode)
+                                AND
+                                location_id IN (SELECT location_id FROM locations WHERE 
+                                    location = @Location));
+
+                            INSERT INTO history (product_id, history_status, location_id, stock_number) 
+                            VALUES 
+                                ((SELECT product_id FROM products WHERE product_barcode = @Barcode), 
+                                '0', 
+                                (SELECT location_id FROM locations WHERE 
+                                    location = @Location),
+                                @Number)
+                        ";
+                        cmd.Prepare();
+                        cmd.Parameters.AddWithValue("Barcode", Barcode);
+                        cmd.Parameters.AddWithValue("Location", Location);
+                        cmd.Parameters.AddWithValue("Number", Number);
+                        cmd.ExecuteNonQuery();
+                        transaction.Commit();
+                    }
+                }
+                MessageBox.Show("Delete Out Inventory.");
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("OutInventoryDelete Message: " + SQLiteThrow.Message);
             }
         }
 

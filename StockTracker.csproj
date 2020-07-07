@@ -50,8 +50,13 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.113.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>packages\System.Data.SQLite.Core.1.0.113.1\lib\net451\System.Data.SQLite.dll</HintPath>
@@ -62,6 +67,7 @@
     <Reference Include="System.Data.SQLite.Linq, Version=1.0.113.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>packages\System.Data.SQLite.Linq.1.0.113.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -123,11 +129,11 @@
     <Compile Include="OutInventory.Designer.cs">
       <DependentUpon>OutInventory.cs</DependentUpon>
     </Compile>
-    <Compile Include="OutInvLocation.cs">
+    <Compile Include="OutInvOptions.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OutInvLocation.Designer.cs">
-      <DependentUpon>OutInvLocation.cs</DependentUpon>
+    <Compile Include="OutInvOptions.Designer.cs">
+      <DependentUpon>OutInvOptions.cs</DependentUpon>
     </Compile>
     <Compile Include="ParentForm.cs">
       <SubType>Form</SubType>
@@ -137,6 +143,18 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports.Designer.cs">
+      <DependentUpon>Reports.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StockStatus.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StockStatus.Designer.cs">
+      <DependentUpon>StockStatus.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AddLocation.resx">
       <DependentUpon>AddLocation.cs</DependentUpon>
     </EmbeddedResource>
@@ -158,8 +176,8 @@
     <EmbeddedResource Include="OutInventory.resx">
       <DependentUpon>OutInventory.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OutInvLocation.resx">
-      <DependentUpon>OutInvLocation.cs</DependentUpon>
+    <EmbeddedResource Include="OutInvOptions.resx">
+      <DependentUpon>OutInvOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ParentForm.resx">
       <DependentUpon>ParentForm.cs</DependentUpon>
@@ -174,6 +192,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Reports.resx">
+      <DependentUpon>Reports.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StockStatus.resx">
+      <DependentUpon>StockStatus.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -27,12 +27,6 @@ namespace StockTracker
             comboBox1.Items.AddRange(locations[0].Distinct().ToArray().ToList().Select(i => (object)i).ToArray());
             comboBox2.Items.AddRange(Enumerable.Range(1, Int32.Parse(locations[1])).Select(i => (object)i).ToArray());
             comboBox3.Items.AddRange(Enumerable.Range(1, Int32.Parse(locations[2])).Select(i => (object)i).ToArray());
-            comboBox1.SelectedItem = null;
-            comboBox1.SelectedText = "--select--";
-            comboBox2.SelectedItem = null;
-            comboBox2.SelectedText = "--select--";
-            comboBox3.SelectedItem = null;
-            comboBox3.SelectedText = "--select--";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -43,6 +37,10 @@ namespace StockTracker
                 if (comboBox1.SelectedItem == null || comboBox2.SelectedItem == null || comboBox3.SelectedItem == null)
                 {
                     MessageBox.Show("Location is not selected correctly.");
+                }
+                else if(numericUpDown1.Value < 1)
+                {
+                    MessageBox.Show("The number cannot be zero or negative.");
                 }
                 else
                 {
@@ -58,6 +56,7 @@ namespace StockTracker
                     {
                         DatabaseClass.InInventoryInsert(InInventory.Barcode, Decimal.ToInt32(numericUpDown1.Value), Location);
                     }
+
                     this.Close();
                 }
             }

@@ -44,27 +44,39 @@ namespace StockTracker
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (DatabaseClass.IsBarcodeExist(textBox1.Text))
+            if (textBox1.Text.Length < 9)
             {
-                if (MessageBox.Show("This barcode already exist in inventory list. Clear field for new barcode?", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk
-                ) == DialogResult.Yes)
+                MessageBox.Show("Barcode must be at 9 characters long.");
+            }
+            else
+            {
+
+                if (DatabaseClass.IsBarcodeExist(textBox1.Text))
                 {
-                    textBox1.Text = "";
+                    if (MessageBox.Show("This barcode already exist in inventory list. Clear field for new barcode?", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk
+                    ) == DialogResult.Yes)
+                    {
+                        textBox1.Text = "";
+                    }
+                    else
+                    {
+                        BarcodeCreater();
+                    }
                 }
                 else
                 {
                     BarcodeCreater();
                 }
             }
-            else
-            {
-                BarcodeCreater();
-            }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            pictureBox1.Image.Save(@"Barcodes/"+ textBox1.Text + ".png", ImageFormat.Png);
+            if (pictureBox1.Image != null)
+            {
+                pictureBox1.Image.Save(@"Barcodes/" + textBox1.Text + ".png", ImageFormat.Png);
+                MessageBox.Show("Saved.");
+            }
         }
 
         void BarcodeCreater()//Kodu iki kere yazmamız gerekeceği için barkod oluşturan kodu yazdık
