@@ -20,9 +20,24 @@ namespace StockTracker
 
             DatabaseClass.CreateDB();
             DatabaseClass.CreateTable();
-
-
-            if (!DatabaseClass.LocationTableCheck())
+            string[] LicenseKey = new string[2];
+            LicenseKey = Regedit.Read();
+            
+            if(LicenseKey == null)
+            {
+                menuStrip1.Enabled = false;
+                Form License = new License();
+                License.MdiParent = this;
+                License.Show();
+            }
+            else if (!MethodsClass.LicenseCheck(MethodsClass.CreateKey(LicenseKey[0]), LicenseKey[1]))
+            {
+                menuStrip1.Enabled = false;
+                Form License = new License();
+                License.MdiParent = this;
+                License.Show();
+            }
+            else if (!DatabaseClass.LocationTableCheck())
             {
                 Form AddLocation = new AddLocation();
                 AddLocation.ShowDialog();
