@@ -42,7 +42,7 @@ namespace StockTracker
         {
             if (checkBox1.Checked)
             {
-                if (textBox1.Text != null || textBox2.Text != null)
+                if (textBox1.Text != null && textBox2.Text != null)
                 {
                     if (MethodsClass.LicenseCheck(MethodsClass.CreateKey(textBox1.Text), textBox2.Text))
                     {

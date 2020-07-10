@@ -21,18 +21,29 @@ namespace StockTracker
 
         private void ManageProducts_Load(object sender, EventArgs e)
         {
-            DataGridFill();
+            //DataGridFill();
         }
 
         private void DataGridFill()
         {
+            dataGridView1.Columns.Clear();
+            dataGridView1.DataSource = null;
+
             DataSet ds = DatabaseClass.GridFill("*", "products", textBox3.Text, textBox4.Text, "", "");
             dataGridView1.DataSource = ds.Tables["*"];
+
             dataGridView1.Columns[1].HeaderText = "Barcodes";
             dataGridView1.Columns[2].HeaderText = "Name";
             dataGridView1.Columns[3].HeaderText = "Add Date";
             dataGridView1.Columns[0].Visible = false;
             dataGridView1.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
+            dataGridView1.Columns.Add(btn);
+            btn.HeaderText = "Click Data";
+            btn.Text = "Click Here";
+            btn.Name = "btn";
+            btn.UseColumnTextForButtonValue = true;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -84,7 +95,6 @@ namespace StockTracker
 
         private void ManageProducts_Activated(object sender, EventArgs e)
         {
-            dataGridView1.DataSource = null;
             DataGridFill();
         }
 

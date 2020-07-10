@@ -19,11 +19,14 @@ namespace StockTracker
 
         private void InInventory_Load(object sender, EventArgs e)
         {
-            DataGridFill();
+            //DataGridFill();
         }
 
         private void DataGridFill()
         {
+            dataGridView1.Columns.Clear();
+            dataGridView1.DataSource = null;
+
             string date = "AND history_adding_time  BETWEEN '" + DateTime.Today.AddDays(-2).ToString("yyyy-MM-dd") + " 00:00:00' and '" + DateTime.Today.ToString("yyyy-MM-dd") + " 23:59:59'";
 
             DataSet ds = DatabaseClass.GridFill("*", "in_history_view", "", "", date, "");
@@ -110,7 +113,6 @@ namespace StockTracker
 
         private void InInventory_Activated(object sender, EventArgs e)
         {
-            dataGridView1.DataSource = null;
             DataGridFill();
         }
 

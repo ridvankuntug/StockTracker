@@ -24,11 +24,14 @@ namespace StockTracker
         {
             dateTimePicker1.Value = DateTime.Today.AddDays(-2);
             dateTimePicker2.Value = DateTime.Today;
-            DataGridFill();
+            //DataGridFill();
         }
 
         private void DataGridFill()
         {
+            dataGridView1.Columns.Clear();
+            dataGridView1.DataSource = null;
+
             DataSet ds;
             string date;
             string table = "history_view";

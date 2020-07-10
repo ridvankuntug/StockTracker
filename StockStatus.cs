@@ -21,11 +21,14 @@ namespace StockTracker
 
         private void StockStatus_Load(object sender, EventArgs e)
         {
-            DataGridFill();
+            //DataGridFill();
         }
 
         private void DataGridFill()
         {
+            dataGridView1.Columns.Clear();
+            dataGridView1.DataSource = null;
+
             DataSet ds = DatabaseClass.GridFill("*", "stock_view", textBox1.Text, textBox2.Text, "", "");
             dataGridView1.DataSource = ds.Tables["*"];
             dataGridView1.Columns[0].HeaderText = "Name";
