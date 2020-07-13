@@ -98,6 +98,12 @@
       <DependentUpon>CreateBarcode.cs</DependentUpon>
     </Compile>
     <Compile Include="DatabaseClass.cs" />
+    <Compile Include="EditProduct.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditProduct.Designer.cs">
+      <DependentUpon>EditProduct.cs</DependentUpon>
+    </Compile>
     <Compile Include="EULA.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -161,6 +167,12 @@
     <Compile Include="Reports.Designer.cs">
       <DependentUpon>Reports.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingsMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsMenu.Designer.cs">
+      <DependentUpon>SettingsMenu.cs</DependentUpon>
+    </Compile>
     <Compile Include="StockStatus.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,6 +184,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CreateBarcode.resx">
       <DependentUpon>CreateBarcode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditProduct.resx">
+      <DependentUpon>EditProduct.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EULA.resx">
       <DependentUpon>EULA.cs</DependentUpon>
@@ -212,6 +227,9 @@
     </Compile>
     <EmbeddedResource Include="Reports.resx">
       <DependentUpon>Reports.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsMenu.resx">
+      <DependentUpon>SettingsMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StockStatus.resx">
       <DependentUpon>StockStatus.cs</DependentUpon>

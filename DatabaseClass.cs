@@ -88,7 +88,7 @@ namespace StockTracker
                             location_a VARCHAR(3) NOT NULL,
                             location_b VARCHAR(3) NOT NULL,
                             location_c VARCHAR(3) NOT NULL,
-                            location VARCHAR(3) NOT NULL);
+                            location VARCHAR(3) NOT NULL UNIQUE);
 
                             CREATE TABLE IF NOT EXISTS stock (
                             stock_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
@@ -126,10 +126,10 @@ namespace StockTracker
                                             
                             CREATE VIEW IF NOT EXISTS stock_view
                             AS
-                            SELECT product_name, product_barcode, SUM(stock_number), GROUP_CONCAT(location ,', ') FROM stock 
+                            SELECT product_name, product_barcode, SUM(stock_number), GROUP_CONCAT(location || ': ' || stock_number, ', ') FROM stock 
                             JOIN products ON products.product_id = stock.product_id
                             JOIN locations ON locations.location_id = stock.location_id 
-                            GROUP BY product_barcode;
+                            GROUP BY product_barcode
                             
 
                             ";
@@ -192,34 +192,67 @@ namespace StockTracker
             }
         }
 
-        public static void LocationTableAddItem(char i, int j, int k)
+        public static void LocationTableAddItem(char Location_A, int Location_B, int Location_C)
         {
+            System.Threading.Thread thread1 = new System.Threading.Thread(new System.Threading.ThreadStart(deneme));
+            thread1.Priority = System.Threading.ThreadPriority.Highest;
+            thread1.Start();
 
-            try
+            void deneme()
             {
-                ConnectDatabase();
-                using (con)
+                try
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    ConnectDatabase();
+                    using (con)
                     {
-                        SQLiteTransaction transaction = null;
-                        transaction = con.BeginTransaction();
+                        using (SQLiteCommand cmd = new SQLiteCommand(con))
+                        {
+                            SQLiteTransaction transaction = null;
+                            transaction = con.BeginTransaction();
 
-                        cmd.CommandText = @"INSERT INTO locations (location_a, location_b, Location_c, location) 
-                                            VALUES (@Location1, @Location2, @Location3, @Location)";
-                        cmd.Prepare();
-                        cmd.Parameters.AddWithValue("Location1", i.ToString());
-                        cmd.Parameters.AddWithValue("Location2", j);
-                        cmd.Parameters.AddWithValue("Location3", k);
-                        cmd.Parameters.AddWithValue("Location", i.ToString() + j + k);
-                        cmd.ExecuteNonQuery();
-                        transaction.Commit();
+                            char i = 'A';
+                            int j = 1, k = 1;
+                            int x = 0;
+
+
+
+                            string values = "";
+
+                            for (i = 'A'; i <= Location_A; i++)
+                            {
+                                for (j = 1; j <= Location_B; j++)
+                                {
+                                    for (k = 1; k <= Location_C; k++)
+                                    {
+                                        if (x == 0)
+                                        {
+                                            x++;
+                                        }
+                                        else
+                                        {
+                                            values = values + ", ";
+                                        }
+                                        values = values + "('" + i + "', '" + +j + "', '" + k + "', '" + i + j + k + "')";
+                                    }
+                                }
+                            }
+
+                            cmd.CommandText = @"INSERT OR IGNORE INTO locations (location_a, location_b, Location_c, location) 
+                                            VALUES " + values;
+                            cmd.Prepare();
+                            cmd.ExecuteNonQuery();
+                            transaction.Commit();
+                        }
                     }
                 }
-            }
-            catch (SQLiteException SQLiteThrow)
-            {
-                MessageBox.Show("LocationTableAddItem Message: " + SQLiteThrow.Message + "\n");
+                catch (SQLiteException SQLiteThrow)
+                {
+                    MessageBox.Show("LocationTableAddItem Message: " + SQLiteThrow.Message + "\n");
+                }
+                finally
+                {
+                    Application.Restart();
+                }
             }
         }
 
@@ -260,8 +293,13 @@ namespace StockTracker
             }
         }
 
-        public static bool IsBarcodeExist(string Barcode)
+        public static bool IsBarcodeExist(string Barcode, string ProductID)
         {
+            if (ProductID != "")
+            {
+                ProductID = "AND product_id != '" + ProductID + "'";
+            }
+
             try
             {
                 ConnectDatabase();
@@ -269,9 +307,55 @@ namespace StockTracker
                 {
                     using (SQLiteCommand cmd = new SQLiteCommand(con))
                     {
-                        cmd.CommandText = @"SELECT * FROM products WHERE product_barcode = @Barcode";
+                        cmd.CommandText = @"SELECT * FROM products WHERE product_barcode = @Barcode " + ProductID; ;
                         cmd.Prepare();
                         cmd.Parameters.AddWithValue("Barcode", Barcode);
+                        using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                        {
+                            if (rdr.Read())
+                            {
+                                if (rdr.GetInt32(0) != null)
+                                {
+                                    return true;
+                                }
+                                else
+                                {
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                            con.Close();
+                        }
+                    }
+                }
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("IsBarcodeExist Message: " + SQLiteThrow.Message + "\n");
+                return false;
+            }
+        }
+
+        public static bool IsProductNameExist(string Name, string ProductID)
+        {
+            if(ProductID != "")
+            {
+                ProductID = "AND product_id != '" + ProductID + "'";
+            }
+
+            try
+            {
+                ConnectDatabase();
+                using (con)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        cmd.CommandText = @"SELECT * FROM products WHERE product_name = @Name " + ProductID;
+                        cmd.Prepare();
+                        cmd.Parameters.AddWithValue("Name", Name);
                         using (SQLiteDataReader rdr = cmd.ExecuteReader())
                         {
                             if (rdr.Read())
@@ -334,6 +418,55 @@ namespace StockTracker
                         MessageBox.Show("This product name already exist!");
                     }
                     else if(Equals(stringCutted, "products.product_barcode"))
+                    {
+                        MessageBox.Show("This product barcode already exist!");
+                    }
+                    else
+                    {
+                        MessageBox.Show("AddNewProduct Message19: " + SQLiteThrow.Message + "\n");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("AddNewProduct Message: " + SQLiteThrow.Message + "\n");
+                }
+            }
+        }
+
+        public static void EditProduct(int ProductID, int Barcode, string Name)
+        {
+            try
+            {
+                ConnectDatabase();
+                using (con)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        SQLiteTransaction transaction = null;
+                        transaction = con.BeginTransaction();
+
+                        cmd.CommandText = @"UPDATE products SET product_barcode = @Barcode, product_name = @Name
+                                            WHERE product_id = @ProductID";
+                        cmd.Prepare();
+                        cmd.Parameters.AddWithValue("Barcode", Barcode);
+                        cmd.Parameters.AddWithValue("Name", Name);
+                        cmd.Parameters.AddWithValue("ProductID", ProductID);
+                        cmd.ExecuteNonQuery();
+                        transaction.Commit();
+                    }
+                }
+                MessageBox.Show("Saved.");
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                string stringCutted = SQLiteThrow.Message.Split(' ').Last();
+                if (SQLiteThrow.ErrorCode == 19)
+                {
+                    if (Equals(stringCutted, "products.product_name"))
+                    {
+                        MessageBox.Show("This product name already exist!");
+                    }
+                    else if (Equals(stringCutted, "products.product_barcode"))
                     {
                         MessageBox.Show("This product barcode already exist!");
                     }
@@ -860,6 +993,79 @@ namespace StockTracker
             catch (SQLiteException SQLiteThrow)
             {
                 MessageBox.Show("OutInventoryDelete Message: " + SQLiteThrow.Message);
+            }
+        }
+
+        public static void DeleteOlderThen(string Time)
+        {
+            try
+            {
+                ConnectDatabase();
+                using (con)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        SQLiteTransaction transaction = null;
+                        transaction = con.BeginTransaction();
+
+                        cmd.CommandText = @"
+                            DELETE FROM history WHERE 
+                                history_adding_time < DATE('NOW', '-" + Time + @" YEAR');
+                        ";
+                        cmd.Prepare();
+                        int effectedRowsCount = cmd.ExecuteNonQuery();
+                        transaction.Commit();
+                        if (effectedRowsCount > 0)
+                            MessageBox.Show("Delete older the " + Time + " year history. \n"
+                                + effectedRowsCount + " Rows effected.");
+                    }
+                }
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("DeleteOlderThen Message: " + SQLiteThrow.Message);
+            }
+        }
+
+
+        public static string[] MinLocation()
+        {
+            string[] location = new string[3];
+            try
+            {
+                ConnectDatabase();
+                using (con)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        cmd.CommandText = @"
+                            SELECT MAX(location_a), MAX(location_b), MAX(location_c) FROM locations
+                        ";
+                        cmd.Prepare();
+                        using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                        {
+                            if (rdr.Read())
+                            {
+                                location[0] = rdr.GetString(0);
+                                location[1] = rdr.GetString(1);
+                                location[2] = rdr.GetString(2);
+                            }
+                            else
+                            {
+                                location[0] = "A";
+                                location[1] = "1";
+                                location[2] = "1";
+                            }
+                            con.Close();
+                            return location;
+                        }
+                    }
+                }
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("IsStockZero Message: " + SQLiteThrow.Message + "\n");
+                return null;
             }
         }
 

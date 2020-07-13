@@ -22,5 +22,17 @@ namespace StockTracker.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int DeletePeriod {
+            get {
+                return ((int)(this["DeletePeriod"]));
+            }
+            set {
+                this["DeletePeriod"] = value;
+            }
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace StockTracker
             else
             {
 
-                if (DatabaseClass.IsBarcodeExist(textBox1.Text))
+                if (DatabaseClass.IsBarcodeExist(textBox1.Text, ""))
                 {
                     if (MessageBox.Show("This barcode already exist in inventory list. Clear field for new barcode?", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk
                     ) == DialogResult.Yes)
@@ -107,7 +107,7 @@ namespace StockTracker
             do {
                 textBox1.Text = rand;
                 rand = rnd.Next(100000000, 999999999).ToString();
-            } while(DatabaseClass.IsBarcodeExist(rand));
+            } while(DatabaseClass.IsBarcodeExist(rand, ""));
 
         }
 

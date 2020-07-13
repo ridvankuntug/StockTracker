@@ -77,7 +77,7 @@ namespace StockTracker
             {
                 MessageBox.Show("Barcode must be at 9 characters long.");
             }
-            else if (!DatabaseClass.IsBarcodeExist(textBox1.Text))
+            else if (!DatabaseClass.IsBarcodeExist(textBox1.Text, ""))
             {
                 MessageBox.Show("Barcode is undefined on products.");
             }
@@ -89,7 +89,6 @@ namespace StockTracker
                 InInvOptions.ShowDialog(this);
                 if (InInvOptions.DialogResult == DialogResult.OK)
                 {
-                    dataGridView1.DataSource = null;
                     DataGridFill();
                 }
             }

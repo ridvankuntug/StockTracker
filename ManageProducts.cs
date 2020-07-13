@@ -40,9 +40,9 @@ namespace StockTracker
 
             DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
             dataGridView1.Columns.Add(btn);
-            btn.HeaderText = "Click Data";
-            btn.Text = "Click Here";
-            btn.Name = "btn";
+            btn.Name = "dataGridButton";
+            btn.HeaderText = "";
+            btn.Text = "Edit";
             btn.UseColumnTextForButtonValue = true;
         }
 
@@ -64,14 +64,21 @@ namespace StockTracker
             {
                 MessageBox.Show("Barcode must be at 9 characters long.");
             }
-            else if (DatabaseClass.IsBarcodeExist(textBox1.Text))
+            else if (textBox2.Text == "")
+            {
+                MessageBox.Show("Product name must not be empty.");
+            }
+            else if (DatabaseClass.IsBarcodeExist(textBox1.Text, ""))
             {
                 MessageBox.Show("Barcode already exist.");
+            }
+            else if (DatabaseClass.IsProductNameExist(textBox2.Text, ""))
+            {
+                MessageBox.Show("Product name already exist.");
             }
             else
             {
                 DatabaseClass.AddNewProduct(Int32.Parse(textBox1.Text), textBox2.Text);
-                dataGridView1.DataSource = null;
                 DataGridFill();
 
             }
@@ -151,6 +158,35 @@ namespace StockTracker
                     oSheet.Cells[i + 2, j + 1].Interior.Color = System.Drawing.ColorTranslator.ToOle(dataGridView1.Rows[i].DefaultCellStyle.BackColor);
 
                 }
+            }
+        }
+
+        public static string[] CellID = new string[3];
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 4)
+            {
+                CellID[0] = dataGridView1.Rows[e.RowIndex].Cells["product_id"].Value.ToString();
+                CellID[1] = dataGridView1.Rows[e.RowIndex].Cells["product_barcode"].Value.ToString();
+                CellID[2] = dataGridView1.Rows[e.RowIndex].Cells["product_name"].Value.ToString();
+
+                Form EditProduct = new EditProduct();
+                EditProduct.ShowDialog(this);
+
+                while (EditProduct.DialogResult != DialogResult.Cancel)
+                {
+                    if (EditProduct.DialogResult == DialogResult.OK)
+                    {
+                        DataGridFill();
+                        break;
+                    }
+                    else
+                    {
+                        EditProduct.ShowDialog(this);
+                    }
+                }
+
             }
         }
     }

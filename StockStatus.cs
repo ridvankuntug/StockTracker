@@ -93,5 +93,10 @@ namespace StockTracker
                 }
             }
         }
+
+        private void StockStatus_Activated(object sender, EventArgs e)
+        {
+            DataGridFill();
+        }
     }
 }

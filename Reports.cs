@@ -185,8 +185,9 @@ namespace StockTracker
             }
         }
 
-
-
-
+        private void Reports_Activated(object sender, EventArgs e)
+        {
+            DataGridFill();
+        }
     }
 }

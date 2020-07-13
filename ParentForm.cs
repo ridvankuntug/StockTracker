@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StockTracker.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,6 +23,8 @@ namespace StockTracker
             DatabaseClass.CreateTable();
             string[] LicenseKey = new string[2];
             LicenseKey = Regedit.Read();
+
+            DatabaseClass.DeleteOlderThen(Settings.Default.DeletePeriod.ToString());
             
             if(LicenseKey == null)
             {
@@ -72,6 +75,12 @@ namespace StockTracker
             Form HomeForm = new Home();
             HomeForm.MdiParent = this;
             HomeForm.Show();
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form SettingsMenu = new SettingsMenu();
+            SettingsMenu.ShowDialog(this);
         }
     }
 }
