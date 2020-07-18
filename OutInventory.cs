@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
+using Excel = Microsoft.Office.Interop.Excel;
+using Microsoft.Office.Interop.Excel;
 
 namespace StockTracker
 {
@@ -20,6 +23,8 @@ namespace StockTracker
         private void OutInventory_Load(object sender, EventArgs e)
         {
             //DataGridFill();
+            label3.Visible = false;
+            label4.Visible = false;
         }
 
         private void DataGridFill()
@@ -110,6 +115,34 @@ namespace StockTracker
             }
         }
 
+        public static void labelChange(string status, string label)
+        {
+            System.Threading.Thread threadlabel = new System.Threading.Thread(new System.Threading.ThreadStart(change));
+            Control.CheckForIllegalCrossThreadCalls = false;    // THREAD ÇAKIŞMASINI ENGELLER
+            threadlabel.Priority = System.Threading.ThreadPriority.Highest;
+            threadlabel.Start();
+
+            void change()
+            {
+                label3.Text = status;
+                label3.ForeColor = Color.Green;
+                label3.Visible = true;
+
+                label4.Text = label;
+                label4.ForeColor = Color.Green;
+                label4.Visible = true;
+
+                Thread.Sleep(10000);
+
+                label3.Visible = false;
+                label4.Visible = false;
+
+                label3.Text = "";
+                label4.Text = "";
+
+            }
+        }
+
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             if (System.Text.RegularExpressions.Regex.IsMatch(textBox1.Text, "  ^ [0-9]"))
@@ -129,6 +162,43 @@ namespace StockTracker
         private void OutInventory_Activated(object sender, EventArgs e)
         {
             DataGridFill();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Excel.Application oExcel_15 = null;
+            Excel.Workbook oBook = null;
+            Excel.Sheets oSheetsColl = null;
+            Excel.Worksheet oSheet = null;
+            Excel.Range oRange = null;
+            Object oMissing = System.Reflection.Missing.Value;
+
+            oExcel_15 = new Excel.Application();
+
+            oExcel_15.Visible = true;
+
+            oExcel_15.UserControl = true;
+
+
+            oBook = oExcel_15.Workbooks.Add(oMissing);
+
+            oSheetsColl = oExcel_15.Worksheets;
+
+            oSheet = (Excel.Worksheet)oSheetsColl.get_Item(1);
+
+
+            for (int i = 0; i < dataGridView1.Columns.Count; i++)
+            {
+                oSheet.Cells[1, i + 1] = dataGridView1.Columns[i].HeaderText;
+            }
+
+            for (int i = 0; i < dataGridView1.Rows.Count; i++)
+            {
+                for (int j = 0; j < dataGridView1.Columns.Count; j++)
+                {
+                    oSheet.Cells[i + 2, j + 1] = dataGridView1.Rows[i].Cells[dataGridView1.Columns[j].Name].Value.ToString();
+                }
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,8 +43,26 @@ namespace StockTracker
             }
             else if (!DatabaseClass.LocationTableCheck())
             {
-                Form AddLocation = new AddLocation();
-                AddLocation.ShowDialog();
+                if (!DatabaseClass.ProductsTableCheck())
+                {
+                    if (MessageBox.Show(
+                        "Do you have a database created and backed up with this program that you want to add to the system? \nIf you choose a wrong file, you may need to uninstall and reinstall the program.", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk
+                        ) == DialogResult.Yes)
+                    {
+                        Form ImportDatabaseFile = new ImportDatabaseFile();
+                        ImportDatabaseFile.ShowDialog();
+                    }
+                    else
+                    {
+                        Form AddLocation = new AddLocation();
+                        AddLocation.ShowDialog();
+                    }
+                }
+                else
+                {
+                    Form AddLocation = new AddLocation();
+                    AddLocation.ShowDialog();
+                }
             }
             else
             {
@@ -81,6 +100,23 @@ namespace StockTracker
         {
             Form SettingsMenu = new SettingsMenu();
             SettingsMenu.ShowDialog(this);
+        }
+
+        private void backUpDatabaseToDesktopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void databaseManagementToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(
+                    "Are you sure you want to enter this menu? \nIn this menu, you can perform irreversible actions or delete all data.?", "Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk
+                ) == DialogResult.Yes)
+            {
+                Form DatabaseManagement = new DatabaseManagement();
+                DatabaseManagement.MdiParent = this;
+                DatabaseManagement.Show();
+            }
         }
     }
 }

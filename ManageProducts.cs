@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using Microsoft.Office.Interop.Excel;
+using System.Threading;
 
 namespace StockTracker
 {
@@ -22,6 +23,9 @@ namespace StockTracker
         private void ManageProducts_Load(object sender, EventArgs e)
         {
             //DataGridFill();
+
+            label8.Visible = false;
+            label7.Visible = false;
         }
 
         private void DataGridFill()
@@ -36,7 +40,7 @@ namespace StockTracker
             dataGridView1.Columns[2].HeaderText = "Name";
             dataGridView1.Columns[3].HeaderText = "Add Date";
             dataGridView1.Columns[0].Visible = false;
-            dataGridView1.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridView1.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
             dataGridView1.Columns.Add(btn);
@@ -60,6 +64,19 @@ namespace StockTracker
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Enter();
+        }
+
+        private void textBox2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                Enter();
+            }
+        }
+
+        public void Enter()
+        {
             if (textBox1.Text.Length < 9)
             {
                 MessageBox.Show("Barcode must be at 9 characters long.");
@@ -80,6 +97,33 @@ namespace StockTracker
             {
                 DatabaseClass.AddNewProduct(Int32.Parse(textBox1.Text), textBox2.Text);
                 DataGridFill();
+            }
+        }
+
+        public static void labelChange(string status, string label)
+        {
+            System.Threading.Thread threadlabel = new System.Threading.Thread(new System.Threading.ThreadStart(change));
+            Control.CheckForIllegalCrossThreadCalls = false;    // THREAD ÇAKIŞMASINI ENGELLER
+            threadlabel.Priority = System.Threading.ThreadPriority.Highest;
+            threadlabel.Start();
+
+            void change()
+            {
+                label7.Text = status;
+                label7.ForeColor = Color.Green;
+                label7.Visible = true;
+
+                label8.Text = label;
+                label8.ForeColor = Color.Green;
+                label8.Visible = true;
+
+                Thread.Sleep(10000);
+
+                label7.Visible = false;
+                label8.Visible = false;
+
+                label7.Text = "";
+                label8.Text = "";
 
             }
         }
@@ -155,7 +199,6 @@ namespace StockTracker
                 for (int j = 0; j < listVisible.Count; j++)
                 {
                     oSheet.Cells[i + 2, j + 1] = dataGridView1.Rows[i].Cells[listVisible[j].Name].Value.ToString();
-                    oSheet.Cells[i + 2, j + 1].Interior.Color = System.Drawing.ColorTranslator.ToOle(dataGridView1.Rows[i].DefaultCellStyle.BackColor);
 
                 }
             }

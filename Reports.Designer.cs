@@ -68,7 +68,7 @@
             this.textBox2.Location = new System.Drawing.Point(76, 73);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(200, 20);
-            this.textBox2.TabIndex = 14;
+            this.textBox2.TabIndex = 1;
             this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // textBox1
@@ -76,7 +76,7 @@
             this.textBox1.Location = new System.Drawing.Point(76, 47);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(200, 20);
-            this.textBox1.TabIndex = 13;
+            this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // dataGridView1
@@ -96,7 +96,7 @@
             this.dateTimePicker1.Location = new System.Drawing.Point(76, 113);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePicker1.TabIndex = 17;
+            this.dateTimePicker1.TabIndex = 2;
             this.dateTimePicker1.Value = new System.DateTime(2019, 6, 30, 15, 2, 0, 0);
             // 
             // dateTimePicker2
@@ -104,7 +104,7 @@
             this.dateTimePicker2.Location = new System.Drawing.Point(76, 139);
             this.dateTimePicker2.Name = "dateTimePicker2";
             this.dateTimePicker2.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePicker2.TabIndex = 18;
+            this.dateTimePicker2.TabIndex = 3;
             this.dateTimePicker2.Value = new System.DateTime(2020, 6, 30, 15, 55, 22, 0);
             // 
             // label3
@@ -122,7 +122,7 @@
             this.checkBox1.Location = new System.Drawing.Point(76, 165);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(84, 17);
-            this.checkBox1.TabIndex = 20;
+            this.checkBox1.TabIndex = 4;
             this.checkBox1.Text = "At All Times.";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
@@ -132,7 +132,7 @@
             this.button2.Location = new System.Drawing.Point(13, 387);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 23;
+            this.button2.TabIndex = 8;
             this.button2.Text = "Back";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
@@ -143,7 +143,7 @@
             this.checkBox2.Location = new System.Drawing.Point(182, 165);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(94, 17);
-            this.checkBox2.TabIndex = 24;
+            this.checkBox2.TabIndex = 5;
             this.checkBox2.Text = "Merge Results";
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
@@ -152,7 +152,7 @@
             this.button1.Location = new System.Drawing.Point(201, 188);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 25;
+            this.button1.TabIndex = 6;
             this.button1.Text = "Refresh";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -162,7 +162,7 @@
             this.button3.Location = new System.Drawing.Point(182, 387);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(94, 23);
-            this.button3.TabIndex = 26;
+            this.button3.TabIndex = 7;
             this.button3.Text = "Export to Excell";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);

@@ -83,7 +83,7 @@
             0});
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown1.TabIndex = 25;
+            this.numericUpDown1.TabIndex = 1;
             this.numericUpDown1.Value = new decimal(new int[] {
             1,
             0,
@@ -116,7 +116,7 @@
             this.button2.Location = new System.Drawing.Point(66, 205);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 28;
+            this.button2.TabIndex = 3;
             this.button2.Text = "Cansel";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
@@ -127,7 +127,7 @@
             this.button1.Location = new System.Drawing.Point(147, 205);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 27;
+            this.button1.TabIndex = 2;
             this.button1.Text = "Save";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -150,7 +150,7 @@
             this.comboBox1.Location = new System.Drawing.Point(102, 131);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(85, 24);
-            this.comboBox1.TabIndex = 22;
+            this.comboBox1.TabIndex = 0;
             // 
             // OutInvOptions
             // 

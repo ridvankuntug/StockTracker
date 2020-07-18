@@ -72,7 +72,7 @@
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.ReadOnly = true;
             this.numericUpDown1.Size = new System.Drawing.Size(85, 20);
-            this.numericUpDown1.TabIndex = 20;
+            this.numericUpDown1.TabIndex = 5;
             this.numericUpDown1.Value = new decimal(new int[] {
             2,
             0,
@@ -81,11 +81,11 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 122);
+            this.progressBar1.Location = new System.Drawing.Point(12, 126);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(270, 23);
             this.progressBar1.Step = 1;
-            this.progressBar1.TabIndex = 27;
+            this.progressBar1.TabIndex = 4;
             // 
             // label4
             // 
@@ -119,16 +119,16 @@
             this.button2.Location = new System.Drawing.Point(182, 266);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(105, 23);
-            this.button2.TabIndex = 22;
+            this.button2.TabIndex = 7;
             this.button2.Text = "Contact Developer";
             this.button2.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(106, 93);
+            this.button1.Location = new System.Drawing.Point(106, 97);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(85, 23);
-            this.button1.TabIndex = 21;
+            this.button1.TabIndex = 3;
             this.button1.Text = "Save";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -151,7 +151,7 @@
             this.comboBox3.Location = new System.Drawing.Point(197, 50);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(85, 24);
-            this.comboBox3.TabIndex = 19;
+            this.comboBox3.TabIndex = 2;
             // 
             // comboBox2
             // 
@@ -161,7 +161,7 @@
             this.comboBox2.Location = new System.Drawing.Point(106, 50);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(85, 24);
-            this.comboBox2.TabIndex = 18;
+            this.comboBox2.TabIndex = 1;
             // 
             // comboBox1
             // 
@@ -171,14 +171,14 @@
             this.comboBox1.Location = new System.Drawing.Point(15, 50);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(85, 24);
-            this.comboBox1.TabIndex = 17;
+            this.comboBox1.TabIndex = 0;
             // 
             // button3
             // 
             this.button3.Location = new System.Drawing.Point(106, 227);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(85, 23);
-            this.button3.TabIndex = 29;
+            this.button3.TabIndex = 6;
             this.button3.Text = "Save";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -188,7 +188,7 @@
             this.button4.Location = new System.Drawing.Point(15, 266);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 30;
+            this.button4.TabIndex = 8;
             this.button4.Text = "Cancel";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
@@ -199,9 +199,9 @@
             this.label6.ForeColor = System.Drawing.Color.Red;
             this.label6.Location = new System.Drawing.Point(59, 77);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(168, 13);
+            this.label6.Size = new System.Drawing.Size(179, 13);
             this.label6.TabIndex = 31;
-            this.label6.Text = "Attention cannot be reduced later!";
+            this.label6.Text = "attention! It cannot be reduced later.";
             // 
             // SettingsMenu
             // 

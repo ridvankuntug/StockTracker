@@ -1,12 +1,7 @@
 ﻿using StockTracker.Properties;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace StockTracker
@@ -24,14 +19,14 @@ namespace StockTracker
         {
             location = DatabaseClass.MinLocation();
             string location0 = location[0];
-            for(char i = Convert.ToChar(location[0]); i <= 'Z'; i++)
+            for (char i = Convert.ToChar(location[0]); i <= 'Z'; i++)
             {
                 location0 = location0 + i;
             }
 
             comboBox1.Items.AddRange(location0.Distinct().ToArray().ToList().Select(i => (object)i).ToArray());
-            comboBox2.Items.AddRange(Enumerable.Range(Int32.Parse(location[1]), 100).Select(i => (object)i).ToArray());
-            comboBox3.Items.AddRange(Enumerable.Range(Int32.Parse(location[2]), 100).Select(i => (object)i).ToArray());
+            comboBox2.Items.AddRange(Enumerable.Range(Int32.Parse(location[1]), 10 - Int32.Parse(location[1])).Select(i => (object)i).ToArray());
+            comboBox3.Items.AddRange(Enumerable.Range(Int32.Parse(location[2]), 100 - Int32.Parse(location[2])).Select(i => (object)i).ToArray());
 
             numericUpDown1.Value = Settings.Default.DeletePeriod;
         }

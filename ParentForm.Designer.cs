@@ -35,6 +35,7 @@
             this.managementToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newInventoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.databaseManagementToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,7 +69,8 @@
             // managementToolStripMenuItem
             // 
             this.managementToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newInventoryToolStripMenuItem});
+            this.newInventoryToolStripMenuItem,
+            this.databaseManagementToolStripMenuItem});
             this.managementToolStripMenuItem.Name = "managementToolStripMenuItem";
             this.managementToolStripMenuItem.Size = new System.Drawing.Size(90, 20);
             this.managementToolStripMenuItem.Text = "Management";
@@ -76,7 +78,7 @@
             // newInventoryToolStripMenuItem
             // 
             this.newInventoryToolStripMenuItem.Name = "newInventoryToolStripMenuItem";
-            this.newInventoryToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.newInventoryToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.newInventoryToolStripMenuItem.Text = "Manage Product";
             this.newInventoryToolStripMenuItem.Click += new System.EventHandler(this.newInventoryToolStripMenuItem_Click);
             // 
@@ -86,6 +88,13 @@
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            // 
+            // databaseManagementToolStripMenuItem
+            // 
+            this.databaseManagementToolStripMenuItem.Name = "databaseManagementToolStripMenuItem";
+            this.databaseManagementToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.databaseManagementToolStripMenuItem.Text = "Database Management";
+            this.databaseManagementToolStripMenuItem.Click += new System.EventHandler(this.databaseManagementToolStripMenuItem_Click);
             // 
             // ParentForm
             // 
@@ -115,6 +124,7 @@
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newInventoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem homeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem databaseManagementToolStripMenuItem;
     }
 }
 

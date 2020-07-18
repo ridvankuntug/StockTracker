@@ -61,7 +61,7 @@ namespace StockTracker
             {
                 if (!Convert.ToBoolean(dr["history_status"])) // if id==2
                 {
-                    dr["stock_number"] = "-" + dr["stock_number"]; //change the name
+                    dr[3] = "-" + dr[3]; //change the name
                                                 //break; break or not depending on you
                 }
             }

@@ -32,13 +32,15 @@ namespace StockTracker
                     "Having trouble?", "Support", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk
                 ) == DialogResult.Yes)
             {
-                System.Diagnostics.Process.Start("mailto:ridvankuntug@gmail.com");
+                System.Diagnostics.Process.Start("mailto:ridvankuntug@gmail.com?subject=I Have a Problem With Stock Tracker");
+
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             Settings.Default.DeletePeriod = Convert.ToInt32(numericUpDown1.Value);
+            Settings.Default.Save();
 
             if(comboBox1.SelectedItem != null && comboBox2.SelectedItem != null & comboBox3.SelectedItem != null)
             {

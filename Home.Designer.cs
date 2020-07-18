@@ -78,10 +78,10 @@
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.button3.Location = new System.Drawing.Point(19, 133);
+            this.button3.Location = new System.Drawing.Point(19, 325);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(122, 86);
-            this.button3.TabIndex = 1;
+            this.button3.Size = new System.Drawing.Size(122, 85);
+            this.button3.TabIndex = 3;
             this.button3.Text = "Reports";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -90,7 +90,7 @@
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.button4.Location = new System.Drawing.Point(146, 325);
+            this.button4.Location = new System.Drawing.Point(148, 325);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(121, 85);
             this.button4.TabIndex = 4;
@@ -101,10 +101,10 @@
             // button5
             // 
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.button5.Location = new System.Drawing.Point(147, 133);
+            this.button5.Location = new System.Drawing.Point(19, 133);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(122, 86);
-            this.button5.TabIndex = 2;
+            this.button5.TabIndex = 1;
             this.button5.Text = "View\r\nStock\r\nStatus";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
@@ -125,12 +125,13 @@
             // 
             this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.button6.Location = new System.Drawing.Point(19, 325);
+            this.button6.Location = new System.Drawing.Point(147, 134);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(121, 85);
-            this.button6.TabIndex = 3;
-            this.button6.Text = "Excell Output";
+            this.button6.Size = new System.Drawing.Size(122, 85);
+            this.button6.TabIndex = 2;
+            this.button6.Text = "Manage Products";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // Home
             // 

@@ -20,6 +20,21 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -40,8 +55,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>box.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -98,6 +120,12 @@
       <DependentUpon>CreateBarcode.cs</DependentUpon>
     </Compile>
     <Compile Include="DatabaseClass.cs" />
+    <Compile Include="DatabaseManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DatabaseManagement.Designer.cs">
+      <DependentUpon>DatabaseManagement.cs</DependentUpon>
+    </Compile>
     <Compile Include="EditProduct.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,6 +143,12 @@
     </Compile>
     <Compile Include="Home.Designer.cs">
       <DependentUpon>Home.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ImportDatabaseFile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImportDatabaseFile.Designer.cs">
+      <DependentUpon>ImportDatabaseFile.cs</DependentUpon>
     </Compile>
     <Compile Include="InInventory.cs">
       <SubType>Form</SubType>
@@ -185,6 +219,9 @@
     <EmbeddedResource Include="CreateBarcode.resx">
       <DependentUpon>CreateBarcode.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DatabaseManagement.resx">
+      <DependentUpon>DatabaseManagement.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EditProduct.resx">
       <DependentUpon>EditProduct.cs</DependentUpon>
     </EmbeddedResource>
@@ -193,6 +230,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Home.resx">
       <DependentUpon>Home.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImportDatabaseFile.resx">
+      <DependentUpon>ImportDatabaseFile.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InInventory.resx">
       <DependentUpon>InInventory.cs</DependentUpon>
@@ -262,6 +302,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\DataSources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="box.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 </ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -112,7 +112,7 @@
             this.textBox1.MaxLength = 9;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(183, 20);
-            this.textBox1.TabIndex = 7;
+            this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
             // 
@@ -121,7 +121,8 @@
             this.textBox2.Location = new System.Drawing.Point(102, 107);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(183, 20);
-            this.textBox2.TabIndex = 8;
+            this.textBox2.TabIndex = 1;
+            this.textBox2.Enter += new System.EventHandler(this.textBox2_Enter);
             // 
             // label8
             // 
@@ -140,7 +141,7 @@
             this.button1.Location = new System.Drawing.Point(210, 146);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 10;
+            this.button1.TabIndex = 2;
             this.button1.Text = "Save";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -151,8 +152,8 @@
             this.button2.Location = new System.Drawing.Point(13, 184);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 11;
-            this.button2.Text = "Cansel";
+            this.button2.TabIndex = 3;
+            this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 

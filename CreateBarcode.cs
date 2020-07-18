@@ -42,9 +42,9 @@ namespace StockTracker
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        public void createBarcode()
         {
-            if (textBox1.Text.Length < 9)
+            if (textBox1.Text.Length< 9)
             {
                 MessageBox.Show("Barcode must be at 9 characters long.");
             }
@@ -68,6 +68,11 @@ namespace StockTracker
                     BarcodeCreater();
                 }
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            createBarcode();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -108,6 +113,8 @@ namespace StockTracker
                 textBox1.Text = rand;
                 rand = rnd.Next(100000000, 999999999).ToString();
             } while(DatabaseClass.IsBarcodeExist(rand, ""));
+
+            createBarcode();
 
         }
 

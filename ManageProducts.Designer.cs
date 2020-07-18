@@ -43,6 +43,8 @@
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
+            label8 = new System.Windows.Forms.Label();
+            label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -124,6 +126,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(200, 20);
             this.textBox2.TabIndex = 18;
+            this.textBox2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox2_KeyDown);
             // 
             // textBox1
             // 
@@ -138,7 +141,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 222);
+            this.label4.Location = new System.Drawing.Point(13, 249);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(50, 13);
             this.label4.TabIndex = 24;
@@ -147,7 +150,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(25, 248);
+            this.label5.Location = new System.Drawing.Point(25, 275);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(38, 13);
             this.label5.TabIndex = 23;
@@ -155,7 +158,7 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(69, 245);
+            this.textBox3.Location = new System.Drawing.Point(69, 272);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(200, 20);
             this.textBox3.TabIndex = 22;
@@ -163,7 +166,7 @@
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(69, 219);
+            this.textBox4.Location = new System.Drawing.Point(69, 246);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(200, 20);
             this.textBox4.TabIndex = 21;
@@ -173,7 +176,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label6.Location = new System.Drawing.Point(128, 200);
+            this.label6.Location = new System.Drawing.Point(128, 227);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(57, 16);
             this.label6.TabIndex = 25;
@@ -189,11 +192,33 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            label8.Location = new System.Drawing.Point(104, 151);
+            label8.Name = "label8";
+            label8.Size = new System.Drawing.Size(41, 13);
+            label8.TabIndex = 29;
+            label8.Text = "label8";
+               // 
+               // label7
+               // 
+            label7.AutoSize = true;
+            label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            label7.Location = new System.Drawing.Point(103, 127);
+            label7.Name = "label7";
+            label7.Size = new System.Drawing.Size(66, 24);
+            label7.TabIndex = 28;
+            label7.Text = "label7";
+            // 
             // ManageProducts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(796, 422);
+            this.Controls.Add(label8);
+            this.Controls.Add(label7);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label4);
@@ -238,5 +263,7 @@
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button4;
+        private static System.Windows.Forms.Label label7;
+        private static System.Windows.Forms.Label label8;
     }
 }

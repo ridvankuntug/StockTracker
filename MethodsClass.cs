@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using System.IO;
 
 namespace StockTracker
 {
@@ -30,6 +31,84 @@ namespace StockTracker
                 return false;
             }
         }
+
+        public static bool ExportDatabase()
+        {
+            try
+            {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                saveFileDialog1.InitialDirectory = path;
+                saveFileDialog1.Filter = "Database Files (*.db)|*.db|All files (*.*)|*.*";
+                saveFileDialog1.Title = "Select the location to back up the database file.";
+                saveFileDialog1.DefaultExt = "db";
+                saveFileDialog1.CheckPathExists = true;
+                saveFileDialog1.FileName = "Stock" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".db";
+
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    if (saveFileDialog1.FileName != "")
+                    {
+                        File.Copy(@"Databases/Stock.db", saveFileDialog1.FileName, true);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+
+                saveFileDialog1.Reset();
+                return true;
+            }
+            catch (IOException IOThrow)
+            {
+                return false;
+            }
+        }
+
+        public static bool ImportDatabase()
+        {
+            try
+            {
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+                string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                openFileDialog1.InitialDirectory = path;
+                openFileDialog1.Filter = "Database Files (*.db)|*.db";
+                openFileDialog1.Title = "Select the location to import the database file.";
+                openFileDialog1.DefaultExt = "db";
+                openFileDialog1.CheckFileExists = true;
+
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    if (openFileDialog1.FileName != "")
+                    {
+                        File.Copy(openFileDialog1.FileName, @"Databases/Stock.db", true);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+
+                openFileDialog1.Reset();
+                return true;
+            }
+            catch (IOException IOThrow)
+            {
+                MessageBox.Show(IOThrow.ToString());
+                return false;
+            }
+        }
+
+
     }
 
     class Regedit

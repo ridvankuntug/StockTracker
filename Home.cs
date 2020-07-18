@@ -111,10 +111,16 @@ namespace StockTracker
 
         private void button3_Click(object sender, EventArgs e)
         {
-
             Form Reports = new Reports();
             Reports.MdiParent = ParentForm;
             Reports.Show();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Form ManageProducts = new ManageProducts();
+            ManageProducts.MdiParent = ParentForm;
+            ManageProducts.Show();
         }
     }
 }

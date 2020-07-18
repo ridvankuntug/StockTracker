@@ -25,6 +25,11 @@ namespace StockTracker
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Save();
+        }
+
+        public void Save()
+        {
             if (textBox1.Text.Length < 9)
             {
                 MessageBox.Show("Barcode must be at 9 characters long.");
@@ -75,6 +80,11 @@ namespace StockTracker
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void textBox2_Enter(object sender, EventArgs e)
+        {
+            Save();
         }
     }
 }

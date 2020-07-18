@@ -20,8 +20,8 @@ namespace StockTracker
         {
             try
             {
-            con = new SQLiteConnection("Data Source=Databases/Stock.db;Version=3;");
-            con.Open();
+                con = new SQLiteConnection("Data Source=Databases/Stock.db;Version=3;");
+                con.Open();
             }
             catch (SQLiteException SQLiteThrow)
             {
@@ -58,7 +58,7 @@ namespace StockTracker
                 MessageBox.Show("CreateDB Message: " + SQLiteThrow.Message + "\n");
             }
         }
-        
+
         public static void CreateTable()
         {
             ConnectDatabase();
@@ -133,7 +133,7 @@ namespace StockTracker
                             
 
                             ";
-                                            
+
                         cmd.ExecuteNonQuery();
                         myTrans.Commit();
                     }
@@ -147,6 +147,48 @@ namespace StockTracker
                         con.Close();
                     }
                 }
+            }
+        }
+
+        public static bool ProductsTableCheck()
+        {
+            try
+            {
+                ConnectDatabase();
+                using (con)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(con))
+                    {
+                        int count;
+                        cmd.CommandText = @"SELECT count(*) FROM products";
+                        cmd.Prepare();
+                        using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                        {
+                            if (rdr.Read())
+                            {
+                                count = rdr.GetInt32(0);
+                                if (count > 0)
+                                {
+                                    return true;
+                                }
+                                else
+                                {
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                            con.Close();
+                        }
+                    }
+                }
+            }
+            catch (SQLiteException SQLiteThrow)
+            {
+                MessageBox.Show("LocationTableCheck Message: " + SQLiteThrow.Message + "\n");
+                return false;
             }
         }
 
@@ -194,11 +236,12 @@ namespace StockTracker
 
         public static void LocationTableAddItem(char Location_A, int Location_B, int Location_C)
         {
-            System.Threading.Thread thread1 = new System.Threading.Thread(new System.Threading.ThreadStart(deneme));
-            thread1.Priority = System.Threading.ThreadPriority.Highest;
-            thread1.Start();
+            System.Threading.Thread threadadd = new System.Threading.Thread(new System.Threading.ThreadStart(add));
+            Control.CheckForIllegalCrossThreadCalls = false;    // THREAD ÇAKIŞMASINI ENGELLER
+            threadadd.Priority = System.Threading.ThreadPriority.Highest;
+            threadadd.Start();
 
-            void deneme()
+            void add()
             {
                 try
                 {
@@ -213,8 +256,6 @@ namespace StockTracker
                             char i = 'A';
                             int j = 1, k = 1;
                             int x = 0;
-
-
 
                             string values = "";
 
@@ -281,7 +322,7 @@ namespace StockTracker
                         {
                             cmd.Fill(ds, "*");
                             return ds;
-                con.Close();
+                            con.Close();
                         }
                     }
                 }
@@ -341,7 +382,7 @@ namespace StockTracker
 
         public static bool IsProductNameExist(string Name, string ProductID)
         {
-            if(ProductID != "")
+            if (ProductID != "")
             {
                 ProductID = "AND product_id != '" + ProductID + "'";
             }
@@ -406,18 +447,18 @@ namespace StockTracker
                         transaction.Commit();
                     }
                 }
-                MessageBox.Show("Saved.");
+                ManageProducts.labelChange("Added!", Barcode + " \n  " + Name);
             }
             catch (SQLiteException SQLiteThrow)
             {
                 string stringCutted = SQLiteThrow.Message.Split(' ').Last();
-                if(SQLiteThrow.ErrorCode == 19)
+                if (SQLiteThrow.ErrorCode == 19)
                 {
                     if (Equals(stringCutted, "products.product_name"))
                     {
                         MessageBox.Show("This product name already exist!");
                     }
-                    else if(Equals(stringCutted, "products.product_barcode"))
+                    else if (Equals(stringCutted, "products.product_barcode"))
                     {
                         MessageBox.Show("This product barcode already exist!");
                     }
@@ -666,13 +707,14 @@ namespace StockTracker
                         cmd.Parameters.AddWithValue("Number", Number);
                         cmd.ExecuteNonQuery();
                         transaction.Commit();
+                        InInventory.labelChange("Added!", Barcode + " \n  " + Number + " \n  " + Location[0] + Location[1] + Location[2]);
                     }
                 }
-                MessageBox.Show("Saved.");
+
             }
             catch (SQLiteException SQLiteThrow)
             {
-                    MessageBox.Show("InInventoryInsert Message: " + SQLiteThrow.Message);
+                MessageBox.Show("InInventoryInsert Message: " + SQLiteThrow.Message);
             }
         }
 
@@ -714,7 +756,7 @@ namespace StockTracker
                         transaction.Commit();
                     }
                 }
-                MessageBox.Show("Updated.");
+                InInventory.labelChange("Added on!", Barcode + " \n  " + Number +" \n  " + Location[0] + Location[1] + Location[2]);
 
             }
             catch (SQLiteException SQLiteThrow)
@@ -747,7 +789,7 @@ namespace StockTracker
                                 number.Add(rdr.GetInt32(1).ToString());
                             }
 
-                            List<List<string>> locations = new List<List<string>> {location, number};
+                            List<List<string>> locations = new List<List<string>> { location, number };
                             return locations;
                             con.Close();
                         }
@@ -944,7 +986,7 @@ namespace StockTracker
                         transaction.Commit();
                     }
                 }
-                MessageBox.Show("Updated Out Inventory.");
+                OutInventory.labelChange("Out!", Barcode + " \n  " + Number + " \n  " + Location);
             }
             catch (SQLiteException SQLiteThrow)
             {
@@ -988,7 +1030,7 @@ namespace StockTracker
                         transaction.Commit();
                     }
                 }
-                MessageBox.Show("Delete Out Inventory.");
+                OutInventory.labelChange("Removed!", Barcode + " \n  " + Number + " \n  " + Location);
             }
             catch (SQLiteException SQLiteThrow)
             {
@@ -1066,6 +1108,99 @@ namespace StockTracker
             {
                 MessageBox.Show("IsStockZero Message: " + SQLiteThrow.Message + "\n");
                 return null;
+            }
+        }
+
+        public static bool DropHistoryStock()
+        {
+            ConnectDatabase();
+            using (con)
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(con))
+                {
+                    cmd.Connection = con;
+                    SQLiteTransaction myTrans;
+
+                    // Start a local transaction
+                    myTrans = con.BeginTransaction();
+                    // Assign transaction object for a pending local transaction
+                    cmd.Transaction = myTrans;
+
+                    try
+                    {
+                        cmd.CommandText = @"
+                            DELETE FROM history;
+                            DELETE FROM SQLITE_SEQUENCE WHERE NAME=history;
+                            
+                            DELETE FROM stock;
+                            DELETE FROM SQLITE_SEQUENCE WHERE NAME=stock;
+
+                            ";
+
+                        cmd.ExecuteNonQuery();
+                        myTrans.Commit();
+
+                        return true;
+                    }
+                    catch (SQLiteException SQLiteThrow)
+                    {
+                        myTrans.Rollback();
+
+                        return false;
+                    }
+                    finally
+                    {
+                        con.Close();
+                    }
+                }
+            }
+        }
+
+        public static bool DropHistoryStockLocation()
+        {
+            ConnectDatabase();
+            using (con)
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand(con))
+                {
+                    cmd.Connection = con;
+                    SQLiteTransaction myTrans;
+
+                    // Start a local transaction
+                    myTrans = con.BeginTransaction();
+                    // Assign transaction object for a pending local transaction
+                    cmd.Transaction = myTrans;
+
+                    try
+                    {
+                        cmd.CommandText = @"
+                            DELETE FROM history;
+                            DELETE FROM SQLITE_SEQUENCE WHERE NAME=history;
+                            
+                            DELETE FROM stock;
+                            DELETE FROM SQLITE_SEQUENCE WHERE NAME=stock;
+                            
+                            DELETE FROM locations;
+                            DELETE FROM SQLITE_SEQUENCE WHERE NAME=locations;
+
+                            ";
+
+                        cmd.ExecuteNonQuery();
+                        myTrans.Commit();
+
+                        return true;
+                    }
+                    catch (SQLiteException SQLiteThrow)
+                    {
+                        myTrans.Rollback();
+
+                        return false;
+                    }
+                    finally
+                    {
+                        con.Close();
+                    }
+                }
             }
         }
 

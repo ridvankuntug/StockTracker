@@ -29,7 +29,7 @@ namespace StockTracker
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("mailto:ridvankuntug@gmail.com?subject=I I Have a License But Not Working&body=I Have a license for the Stock Tracker application but not working. Can you contact me about this.");
+            System.Diagnostics.Process.Start("mailto:ridvankuntug@gmail.com?subject=I Have a License But Not Working&body=I Have a license for the Stock Tracker application but not working. Can you contact me about this.");
         }
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
