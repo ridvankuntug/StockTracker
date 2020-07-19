@@ -73,11 +73,7 @@ namespace StockTracker
             dataGridView1.Columns[4].HeaderText = "Location";
             dataGridView1.Columns[5].HeaderText = "Add Date";
             dataGridView1.Columns[2].Visible = false;
-            dataGridView1.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridView1.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridView1.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridView1.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridView1.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridView1.Columns["product_name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridView1.Sort(this.dataGridView1.Columns[5], ListSortDirection.Descending);
 
             dataGridView1.Refresh();
@@ -100,6 +96,7 @@ namespace StockTracker
                     Myrow.DefaultCellStyle.BackColor = Color.Red;
                 }
             }
+
         }
 
         private void button2_Click(object sender, EventArgs e)

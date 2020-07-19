@@ -78,26 +78,26 @@ namespace StockTracker
                     {
                         cmd.CommandText = @"
                             CREATE TABLE IF NOT EXISTS products (
-                            product_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
+                            product_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 
                             product_barcode INTEGER NOT NULL UNIQUE, 
                             product_name VARCHAR(55) NOT NULL UNIQUE,
                             product_first_add_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
 
                             CREATE TABLE IF NOT EXISTS locations (
-                            location_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
+                            location_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 
                             location_a VARCHAR(3) NOT NULL,
                             location_b VARCHAR(3) NOT NULL,
                             location_c VARCHAR(3) NOT NULL,
                             location VARCHAR(3) NOT NULL UNIQUE);
 
                             CREATE TABLE IF NOT EXISTS stock (
-                            stock_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
+                            stock_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 
                             product_id INTEGER NOT NULL REFERENCES products(product_id) ON UPDATE CASCADE,
                             location_id INTEGER NOT NULL REFERENCES locations(location_id) ON UPDATE CASCADE,
                             stock_number INTEGER NOT NULL);
 
                             CREATE TABLE IF NOT EXISTS history (
-                            history_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
+                            history_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, 
                             product_id INTEGER NOT NULL REFERENCES products(product_id) ON UPDATE CASCADE,
                             history_status INTEGER NOT NULL,
                             stock_number INTEGER NOT NULL,
