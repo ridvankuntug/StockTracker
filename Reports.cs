@@ -22,6 +22,11 @@ namespace StockTracker
 
         private void Reports_Load(object sender, EventArgs e)
         {
+            comboBox1.Items.Insert(0, "Both");
+            comboBox1.Items.Insert(1, "In");
+            comboBox1.Items.Insert(2, "Out");
+            comboBox1.SelectedIndex = 0;
+
             dateTimePicker1.Value = DateTime.Today.AddDays(-2);
             dateTimePicker2.Value = DateTime.Today;
             //DataGridFill();
@@ -33,8 +38,9 @@ namespace StockTracker
             dataGridView1.DataSource = null;
 
             DataSet ds;
+            string table;
             string date;
-            string table = "history_view";
+            string history_status;
 
             if (checkBox1.Checked)
             {
@@ -43,6 +49,21 @@ namespace StockTracker
             else
             {
                 date = "AND history_adding_time  BETWEEN '" + dateTimePicker1.Value.ToString("yyyy-MM-dd") + " 00:00:00' and '" + dateTimePicker2.Value.ToString("yyyy-MM-dd") + " 23:59:59'";
+            }
+
+            if (comboBox1.SelectedIndex == 1)
+            {
+                table = "in_history_view";
+            }
+            else if(comboBox1.SelectedIndex == 2)
+            {
+                table = "out_history_view";
+
+            }
+            else
+            {
+                table = "history_view";
+
             }
 
             if (checkBox2.Checked)
@@ -69,10 +90,10 @@ namespace StockTracker
             dataGridView1.DataSource = dt;
             dataGridView1.Columns[0].HeaderText = "Name";
             dataGridView1.Columns[1].HeaderText = "Barcode";
+            dataGridView1.Columns[2].Visible = false;
             dataGridView1.Columns[3].HeaderText = "Number";
             dataGridView1.Columns[4].HeaderText = "Location";
             dataGridView1.Columns[5].HeaderText = "Add Date";
-            dataGridView1.Columns[2].Visible = false;
             dataGridView1.Columns["product_name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridView1.Sort(this.dataGridView1.Columns[5], ListSortDirection.Descending);
 
@@ -81,19 +102,22 @@ namespace StockTracker
 
         private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            foreach (DataGridViewRow Myrow in dataGridView1.Rows)
-            {     //Here 2 cell is target value and 1 cell is Volume
-                if (Myrow.Cells[2].Value == DBNull.Value)
-                {
-                    Myrow.DefaultCellStyle.BackColor = Color.White;
-                }
-                else if (Convert.ToBoolean(Myrow.Cells[2].Value))// Or your condition 
-                {
-                    Myrow.DefaultCellStyle.BackColor = Color.Lime;
-                }
-                else
-                {
-                    Myrow.DefaultCellStyle.BackColor = Color.Red;
+            if (checkBox3.Checked)
+            {
+                foreach (DataGridViewRow Myrow in dataGridView1.Rows)
+                {     //Here 2 cell is target value and 1 cell is Volume
+                    if (Myrow.Cells[2].Value == DBNull.Value)
+                    {
+                        Myrow.DefaultCellStyle.BackColor = Color.White;
+                    }
+                    else if (Convert.ToBoolean(Myrow.Cells[2].Value))// Or your condition 
+                    {
+                        Myrow.DefaultCellStyle.BackColor = Color.Lime;
+                    }
+                    else
+                    {
+                        Myrow.DefaultCellStyle.BackColor = Color.Red;
+                    }
                 }
             }
 

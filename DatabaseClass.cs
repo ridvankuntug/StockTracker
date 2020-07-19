@@ -112,14 +112,14 @@ namespace StockTracker
 
                             CREATE VIEW IF NOT EXISTS in_history_view
                             AS
-                            SELECT product_name, product_barcode, stock_number, location, history_adding_time FROM history
+                            SELECT product_name, product_barcode, history_status, stock_number, location, history_adding_time FROM history
                             JOIN products ON products.product_id = history.product_id
                             JOIN locations ON locations.location_id = history.location_id
                             WHERE history_status = '1';
 
                             CREATE VIEW IF NOT EXISTS out_history_view
                             AS
-                            SELECT product_name, product_barcode, stock_number, location, history_adding_time FROM history
+                            SELECT product_name, product_barcode, history_status, stock_number, location, history_adding_time FROM history
                             JOIN products ON products.product_id = history.product_id
                             JOIN locations ON locations.location_id = history.location_id
                             WHERE history_status = '0';

@@ -16,7 +16,7 @@
             Uygulamanız geriye doğru uyumluluk için bu sanallaştırmayı gerektiriyorsa, bu öğeyi
             kaldırın.
         -->
-        <requestedExecutionLevel level="asInvoker" uiAccess="false" /><!--TODO-->
+        <requestedExecutionLevel level="requireAdministrator" uiAccess="false" /><!--TODO-->
       </requestedPrivileges>
     </security>
   </trustInfo>

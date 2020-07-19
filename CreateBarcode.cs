@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using ZXing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Diagnostics;
+using IWshRuntimeLibrary;
 
 namespace StockTracker
 {
@@ -132,6 +134,22 @@ namespace StockTracker
             {
                 e.Handled = true;
             }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Process.Start(@"Barcodes");
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            object shDesktop = (object)"Desktop";
+            WshShell shell = new WshShell();
+            string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\Barcodes.lnk";
+            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+            shortcut.Description = "Barcodes folder";
+            shortcut.TargetPath = Application.StartupPath + @"\Barcodes";
+            shortcut.Save();
         }
     }
 }

@@ -38,9 +38,10 @@ namespace StockTracker
             dataGridView1.DataSource = ds.Tables["*"];
             dataGridView1.Columns[0].HeaderText = "Name";
             dataGridView1.Columns[1].HeaderText = "Barcode";
-            dataGridView1.Columns[2].HeaderText = "Number";
-            dataGridView1.Columns[3].HeaderText = "Location";
-            dataGridView1.Columns[4].HeaderText = "Add Date";
+            dataGridView1.Columns[2].Visible = false;
+            dataGridView1.Columns[3].HeaderText = "Number";
+            dataGridView1.Columns[4].HeaderText = "Location";
+            dataGridView1.Columns[5].HeaderText = "Add Date";
             dataGridView1.Columns["product_name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             this.dataGridView1.Sort(this.dataGridView1.Columns[4], ListSortDirection.Descending);
         }

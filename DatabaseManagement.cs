@@ -21,6 +21,7 @@ namespace StockTracker
             label2.Visible = false;
             label3.Visible = false;
             label4.Visible = false;
+            label5.Visible = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -135,6 +136,37 @@ namespace StockTracker
                 label4.ForeColor = Color.Red;
                 label4.Text = "Database not deleted.";
                 label4.Visible = true;
+            }
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (MethodsClass.ExportDatabase())
+            {
+                if (MethodsClass.ImportDatabase())
+                {
+                    label5.ForeColor = Color.Green;
+                    label5.Text = "Imported.";
+                    label5.Visible = true;
+                    Application.Restart();
+                }
+                else
+                {
+                    label5.ForeColor = Color.Red;
+                    label5.Text = "Not implemented.";
+                    label5.Visible = true;
+                }
+            }
+            else
+            {
+                label5.ForeColor = Color.Red;
+                label5.Text = "Not implemented.";
+                label5.Visible = true;
             }
         }
     }
