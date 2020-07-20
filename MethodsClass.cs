@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using System.IO;
+using Excel = Microsoft.Office.Interop.Excel;
+using Microsoft.Office.Interop.Excel;
 
 namespace StockTracker
 {
@@ -108,6 +110,97 @@ namespace StockTracker
             }
         }
 
+        public static bool ExportToExcel(DataGridView dataGridView)
+        {
+            try
+            {
+                Excel.Application xlApp;
+                Excel.Workbook xlWorkBook;
+                Excel.Worksheet xlWorkSheet;
+                object misValue = System.Reflection.Missing.Value;
+
+                xlApp = new Excel.Application();
+                xlWorkBook = xlApp.Workbooks.Add(misValue);
+                xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+
+                List<DataGridViewColumn> listVisible = new List<DataGridViewColumn>();
+                foreach (DataGridViewColumn col in dataGridView.Columns)
+                {
+                    if (col.Visible)
+                        listVisible.Add(col);
+                }
+
+                for (int i = 0; i < listVisible.Count; i++)
+                {
+                    xlWorkSheet.Cells[1, i + 1] = listVisible[i].HeaderText;
+                }
+
+                for (int i = 0; i < dataGridView.Rows.Count; i++)
+                {
+                    for (int j = 0; j < listVisible.Count; j++)
+                    {
+                        xlWorkSheet.Cells[i + 2, j + 1] = dataGridView.Rows[i].Cells[listVisible[j].Name].Value.ToString();
+
+                    }
+                }
+
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                saveFileDialog1.InitialDirectory = path;
+                saveFileDialog1.Filter = "Excel Files (*.xls)|*.xls|All files (*.*)|*.*";
+                saveFileDialog1.Title = "Select the location to export the Excel file.";
+                saveFileDialog1.DefaultExt = "xls";
+                saveFileDialog1.CheckPathExists = true;
+                saveFileDialog1.FileName = "Report" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls";
+
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    if (saveFileDialog1.FileName != "")
+                    {
+                        xlWorkBook.SaveAs(saveFileDialog1.FileName, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+                        xlWorkBook.Close(true, misValue, misValue);
+                        xlApp.Quit();
+
+                        releaseObject(xlWorkSheet);
+                        releaseObject(xlWorkBook);
+                        releaseObject(xlApp);
+
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (IOException IOThrow)
+            {
+                MessageBox.Show(IOThrow.ToString());
+                return false;
+            }
+
+            void releaseObject(object obj)
+            {
+                try
+                {
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
+                    obj = null;
+                }
+                catch (Exception ex)
+                {
+                    obj = null;
+                    MessageBox.Show("Exception occured while releasing object " + ex.ToString());
+                }
+                finally
+                {
+                    GC.Collect();
+                }
+            }
+        }
 
     }
 

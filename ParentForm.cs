@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Reflection;
+using System.Diagnostics;
 
 
 namespace StockTracker
@@ -17,8 +19,14 @@ namespace StockTracker
     {
         public ParentForm()
         {
-            InitializeComponent();
-            //this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            InitializeComponent();            
+        }
+
+        private void ParentForm_Load(object sender, EventArgs e)
+        {
+            this.Text = this.Text + " v" + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+
 
             DatabaseClass.CreateDB();
             DatabaseClass.CreateTable();
@@ -26,8 +34,8 @@ namespace StockTracker
             LicenseKey = Regedit.Read();
 
             DatabaseClass.DeleteOlderThen(Settings.Default.DeletePeriod.ToString());
-            
-            if(LicenseKey == null)
+
+            if (LicenseKey == null)
             {
                 menuStrip1.Enabled = false;
                 Form License = new License();
@@ -118,5 +126,7 @@ namespace StockTracker
                 DatabaseManagement.Show();
             }
         }
+
+        
     }
 }

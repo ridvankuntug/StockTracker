@@ -34,8 +34,8 @@
             this.homeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.managementToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newInventoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.databaseManagementToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -82,19 +82,19 @@
             this.newInventoryToolStripMenuItem.Text = "Manage Product";
             this.newInventoryToolStripMenuItem.Click += new System.EventHandler(this.newInventoryToolStripMenuItem_Click);
             // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
             // databaseManagementToolStripMenuItem
             // 
             this.databaseManagementToolStripMenuItem.Name = "databaseManagementToolStripMenuItem";
             this.databaseManagementToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.databaseManagementToolStripMenuItem.Text = "Database Management";
             this.databaseManagementToolStripMenuItem.Click += new System.EventHandler(this.databaseManagementToolStripMenuItem_Click);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // ParentForm
             // 
@@ -109,6 +109,7 @@
             this.MaximizeBox = false;
             this.Name = "ParentForm";
             this.Text = "Stock Tracker";
+            this.Load += new System.EventHandler(this.ParentForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);

@@ -163,38 +163,14 @@ namespace StockTracker
 
         private void button4_Click(object sender, EventArgs e)
         {
-            Excel.Application oExcel_15 = null;
-            Excel.Workbook oBook = null;
-            Excel.Sheets oSheetsColl = null;
-            Excel.Worksheet oSheet = null;
-            Excel.Range oRange = null;
-            Object oMissing = System.Reflection.Missing.Value;
 
-            oExcel_15 = new Excel.Application();
-
-            oExcel_15.Visible = true;
-
-            oExcel_15.UserControl = true;
-
-
-            oBook = oExcel_15.Workbooks.Add(oMissing);
-
-            oSheetsColl = oExcel_15.Worksheets;
-
-            oSheet = (Excel.Worksheet)oSheetsColl.get_Item(1);
-
-
-            for (int i = 0; i < dataGridView1.Columns.Count; i++)
+            if (MethodsClass.ExportToExcel(dataGridView1))
             {
-                oSheet.Cells[1, i + 1] = dataGridView1.Columns[i].HeaderText;
+                MessageBox.Show("Saved");
             }
-
-            for (int i = 0; i < dataGridView1.Rows.Count; i++)
+            else
             {
-                for (int j = 0; j < dataGridView1.Columns.Count; j++)
-                {
-                    oSheet.Cells[i + 2, j + 1] = dataGridView1.Rows[i].Cells[dataGridView1.Columns[j].Name].Value.ToString();
-                }
+                MessageBox.Show("Can't saved!");
             }
         }
     }

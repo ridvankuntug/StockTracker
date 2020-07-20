@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Excel = Microsoft.Office.Interop.Excel;
-using Microsoft.Office.Interop.Excel;
 
 
 namespace StockTracker
@@ -30,6 +28,11 @@ namespace StockTracker
             dateTimePicker1.Value = DateTime.Today.AddDays(-2);
             dateTimePicker2.Value = DateTime.Today;
             //DataGridFill();
+        }
+
+        private void Reports_Activated(object sender, EventArgs e)
+        {
+            DataGridFill();
         }
 
         private void DataGridFill()
@@ -161,54 +164,16 @@ namespace StockTracker
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Excel.Application oExcel_15 = null;
-            Excel.Workbook oBook = null;
-            Excel.Sheets oSheetsColl = null;
-            Excel.Worksheet oSheet = null;
-            Excel.Range oRange = null;
-            Object oMissing = System.Reflection.Missing.Value;
-
-            oExcel_15 = new Excel.Application();
-
-            oExcel_15.Visible = true;
-
-            oExcel_15.UserControl = true;
-
-
-            oBook = oExcel_15.Workbooks.Add(oMissing);
-
-            oSheetsColl = oExcel_15.Worksheets;
-
-            oSheet = (Excel.Worksheet)oSheetsColl.get_Item(1);
-
-
-
-            List<DataGridViewColumn> listVisible = new List<DataGridViewColumn>();
-            foreach (DataGridViewColumn col in dataGridView1.Columns)
+            if (MethodsClass.ExportToExcel(dataGridView1))
             {
-                if (col.Visible)
-                    listVisible.Add(col);
+                MessageBox.Show("Saved");
             }
-
-            for (int i = 0; i < listVisible.Count; i++)
+            else
             {
-                oSheet.Cells[1, i + 1] = listVisible[i].HeaderText;
-            }
-
-            for (int i = 0; i < dataGridView1.Rows.Count; i++)
-            {
-                for (int j = 0; j < listVisible.Count; j++)
-                {
-                    oSheet.Cells[i + 2, j + 1] = dataGridView1.Rows[i].Cells[listVisible[j].Name].Value.ToString();
-                    oSheet.Cells[i + 2, j + 1].Interior.Color = System.Drawing.ColorTranslator.ToOle(dataGridView1.Rows[i].DefaultCellStyle.BackColor);
-
-                }
+                MessageBox.Show("Can't saved!");
             }
         }
 
-        private void Reports_Activated(object sender, EventArgs e)
-        {
-            DataGridFill();
-        }
+        
     }
 }
