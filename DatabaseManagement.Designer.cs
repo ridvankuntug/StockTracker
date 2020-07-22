@@ -42,18 +42,21 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(219, 103);
+            this.button1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Location = new System.Drawing.Point(165, 110);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(318, 23);
+            this.button1.Size = new System.Drawing.Size(353, 30);
             this.button1.TabIndex = 0;
             this.button1.Text = "Back up database to desktop";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(543, 108);
+            this.label1.Location = new System.Drawing.Point(524, 119);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 1;
@@ -61,18 +64,21 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(219, 132);
+            this.button2.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.button2.FlatAppearance.BorderSize = 0;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.Location = new System.Drawing.Point(165, 146);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(318, 23);
+            this.button2.Size = new System.Drawing.Size(353, 30);
             this.button2.TabIndex = 1;
             this.button2.Text = "Back up database and delete history and stock datas";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(543, 137);
+            this.label2.Location = new System.Drawing.Point(524, 155);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 3;
@@ -80,18 +86,21 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(219, 162);
+            this.button3.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.button3.FlatAppearance.BorderSize = 0;
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button3.Location = new System.Drawing.Point(165, 182);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(318, 23);
+            this.button3.Size = new System.Drawing.Size(353, 30);
             this.button3.TabIndex = 2;
             this.button3.Text = "Back up database and delete history, stock and locations datas";
-            this.button3.UseVisualStyleBackColor = true;
+            this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(543, 167);
+            this.label3.Location = new System.Drawing.Point(524, 191);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(35, 13);
             this.label3.TabIndex = 5;
@@ -99,18 +108,21 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(219, 191);
+            this.button4.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.button4.FlatAppearance.BorderSize = 0;
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.Location = new System.Drawing.Point(165, 218);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(318, 23);
+            this.button4.Size = new System.Drawing.Size(353, 30);
             this.button4.TabIndex = 3;
             this.button4.Text = "Delete all the data and get it started";
-            this.button4.UseVisualStyleBackColor = true;
+            this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(543, 196);
+            this.label4.Location = new System.Drawing.Point(524, 227);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(35, 13);
             this.label4.TabIndex = 7;
@@ -119,18 +131,21 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(219, 220);
+            this.button5.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.button5.FlatAppearance.BorderSize = 0;
+            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button5.Location = new System.Drawing.Point(165, 254);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(318, 23);
+            this.button5.Size = new System.Drawing.Size(353, 30);
             this.button5.TabIndex = 8;
             this.button5.Text = "Choose another database and continue with it";
-            this.button5.UseVisualStyleBackColor = true;
+            this.button5.UseVisualStyleBackColor = false;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(543, 225);
+            this.label5.Location = new System.Drawing.Point(524, 263);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(35, 13);
             this.label5.TabIndex = 9;
@@ -140,6 +155,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.ClientSize = new System.Drawing.Size(796, 422);
             this.ControlBox = false;
             this.Controls.Add(this.label5);

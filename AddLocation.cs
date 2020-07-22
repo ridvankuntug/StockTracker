@@ -57,5 +57,10 @@ namespace StockTracker
                 MessageBox.Show("You can't leave empty slot.");
             }
         }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

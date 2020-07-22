@@ -127,7 +127,5 @@ namespace StockTracker
                 DatabaseManagement.Show();
             }
         }
-
-        
     }
 }
