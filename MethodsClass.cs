@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using System.IO;
-using Excel = Microsoft.Office.Interop.Excel;
-using Microsoft.Office.Interop.Excel;
+
+/*using Excel = Microsoft.Office.Interop.Excel;
+using Microsoft.Office.Interop.Excel;*/
+
+using ExcelLibrary.CompoundDocumentFormat;
+using ExcelLibrary.SpreadSheet;//TODO
 
 namespace StockTracker
 {
@@ -111,17 +115,12 @@ namespace StockTracker
         }
 
         public static bool ExportToExcel(DataGridView dataGridView)
-        {
+        {           
             try
             {
-                Excel.Application xlApp;
-                Excel.Workbook xlWorkBook;
-                Excel.Worksheet xlWorkSheet;
-                object misValue = System.Reflection.Missing.Value;
-
-                xlApp = new Excel.Application();
-                xlWorkBook = xlApp.Workbooks.Add(misValue);
-                xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+                Workbook workbook = new Workbook();
+                Worksheet worksheet = new Worksheet("First Sheet");
+                worksheet.Cells.ColumnWidth[0, 1] = 3000;
 
                 List<DataGridViewColumn> listVisible = new List<DataGridViewColumn>();
                 foreach (DataGridViewColumn col in dataGridView.Columns)
@@ -132,16 +131,22 @@ namespace StockTracker
 
                 for (int i = 0; i < listVisible.Count; i++)
                 {
-                    xlWorkSheet.Cells[1, i + 1] = listVisible[i].HeaderText;
+                    worksheet.Cells[0, i] = new Cell(listVisible[i].HeaderText);
                 }
 
+                int rowCount = 1;
                 for (int i = 0; i < dataGridView.Rows.Count; i++)
                 {
                     for (int j = 0; j < listVisible.Count; j++)
                     {
-                        xlWorkSheet.Cells[i + 2, j + 1] = dataGridView.Rows[i].Cells[listVisible[j].Name].Value.ToString();
-
+                        worksheet.Cells[i + 1, j] = new Cell(dataGridView.Rows[i].Cells[listVisible[j].Name].Value.ToString());
+                        rowCount++;
                     }
+                }
+
+                while(rowCount++ < 150)
+                {
+                    worksheet.Cells[rowCount, 0] = new Cell("");
                 }
 
                 SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -157,13 +162,8 @@ namespace StockTracker
                 {
                     if (saveFileDialog1.FileName != "")
                     {
-                        xlWorkBook.SaveAs(saveFileDialog1.FileName, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
-                        xlWorkBook.Close(true, misValue, misValue);
-                        xlApp.Quit();
-
-                        releaseObject(xlWorkSheet);
-                        releaseObject(xlWorkBook);
-                        releaseObject(xlApp);
+                        workbook.Worksheets.Add(worksheet);
+                        workbook.Save(saveFileDialog1.FileName);
 
                         return true;
                     }
@@ -181,24 +181,6 @@ namespace StockTracker
             {
                 MessageBox.Show(IOThrow.ToString());
                 return false;
-            }
-
-            void releaseObject(object obj)
-            {
-                try
-                {
-                    System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
-                    obj = null;
-                }
-                catch (Exception ex)
-                {
-                    obj = null;
-                    MessageBox.Show("Exception occured while releasing object " + ex.ToString());
-                }
-                finally
-                {
-                    GC.Collect();
-                }
             }
         }
 

@@ -51,6 +51,7 @@ namespace StockTracker
             }
             else if (!DatabaseClass.LocationTableCheck())
             {
+                menuStrip1.Enabled = false;
                 if (!DatabaseClass.ProductsTableCheck())
                 {
                     if (MessageBox.Show(
